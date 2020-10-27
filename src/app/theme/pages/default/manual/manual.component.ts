@@ -41,6 +41,16 @@ export class ManualComponent implements OnInit, AfterViewInit {
   // displayvalidmsg = {
   //   'display':"none"
   // };
+  isETHbuyactive;
+  isETHsellactive;
+  isBTCbuyactive;
+  isBTCsellactive;
+
+  isETHVolumActive;
+  isETHPriceActive;
+  isBTCVolumActive;
+  isBTCPriceActive;
+
   filter:any;
   orderstatusmsg:any;
   orderstatusclass;
@@ -93,11 +103,36 @@ export class ManualComponent implements OnInit, AfterViewInit {
   get order_id(){return this.OrderStatus.get("order_id")};
 
   ngOnInit(){
+    // this.checkLocalstorage();
+    this.setLocalstorage('isBTCVolumActive',true);
+    // console.log('-Bot>',localStorage.getItem("Bot"));
+    // console.log('-Checkbox>',localStorage.getItem("Checkbox"));
+    // localStorage.setItem("Bot", "JavaScript");
+    // localStorage.setItem("Checkbox", "true");
+    window.setInterval(()=>{
+      this._router.getBotStatus()
+      .subscribe(res=>{
+        console.log(typeof(JSON.parse(res["data"].ethBuyBot)));
+        this.isETHVolumActive = JSON.parse(res["data"].ethVolumBot);
+        this.isETHPriceActive = JSON.parse(res["data"].ethPriceBot);
+        this.isBTCVolumActive = JSON.parse(res["data"].btcVolumBot);
+        this.isBTCPriceActive = JSON.parse(res["data"].btcPriceBot);
+      });
+    },2000)
   }
 
   ngAfterViewInit()  {
+    // localstorage Value
+    this._router.getBotStatus()
+    .subscribe(res=>{
+      console.log(typeof(JSON.parse(res["data"].ethBuyBot)));
+      this.isETHVolumActive = JSON.parse(res["data"].ethVolumBot);
+      this.isETHPriceActive = JSON.parse(res["data"].ethPriceBot);
+      this.isBTCVolumActive = JSON.parse(res["data"].btcVolumBot);
+      this.isBTCPriceActive = JSON.parse(res["data"].btcPriceBot);
+    });
   }
-
+  
   changeVolumeAndPriceGenrator(event){
     console.log(event.target.checked);
     
@@ -111,6 +146,7 @@ export class ManualComponent implements OnInit, AfterViewInit {
   }
   
   StartPPPETHVolumeBot(ExPair){
+    this.checkLocalstorage();
     // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
     this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
     // Check Account Balance is Grater then Last Traded Price
@@ -332,4 +368,55 @@ export class ManualComponent implements OnInit, AfterViewInit {
     );
   }
  
+  // getorder_id(){
+  //   this._router.getOrderStatus(this.OrderStatus.value)
+  //   .subscribe(
+  //   res=>{
+  //     if(res["data"].message){
+  //       this.orderstatusmsg = res["data"].message
+  //     }
+  //     else{
+  //       this.orderstatusmsg = "Order: " + res["data"].id + " is " + res["data"].status;
+  //     }
+  //       this.orderstatusclass = "alert-success";
+  //       this.orderstatus = {
+  //         "display":"block"
+  //       };
+  //       window.setTimeout(()=>{
+  //         this.orderstatus = {
+  //           "display":"none"
+  //         };
+  //       },10000);
+  //   },
+  //   err => {
+  //     console.log(err,"error");
+      
+  //     this.orderstatusmsg = err["data"] ;
+  //     this.orderstatusclass = "alert-danger";
+  //     this.orderstatus = {
+  //       "display":"block"
+  //     };
+  //     window.setTimeout(()=>{
+  //       this.orderstatus = {
+  //         "display":"none"
+  //       };
+  //     },10000);
+  //   })
+  //   this.OrderStatus.reset()
+  // }
+  checkLocalstorage(){
+    // let getBot = localStorage.getItem("Bot");
+    let getBotArray = JSON.parse(localStorage.getItem("Bot"));
+    // console.log(typeof array); //object
+    console.log('getBotArray',getBotArray); //[1, 2, 3]
+    let getCheckbox = localStorage.getItem("Checkbox");
+    console.log('-:getBot:-',getBotArray);
+    console.log('-:getCheckbox:-',getCheckbox);
+  }
+  setLocalstorage(isVolum,isPrice){
+    // botStatus = [{runningBot:[isETHVolumActive,isBTCVolumActive]},{checkboxValue:true}]
+    // volume:true|false,price:true|false
+      localStorage.setItem("volume", JSON.stringify(isVolum));
+      localStorage.setItem("price", JSON.stringify(isPrice));
+  }
 }
