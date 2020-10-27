@@ -1,0 +1,58 @@
+<div class="m-5">
+	<span class="h2">Order Book</span>
+	<span [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert mr-5 float-right text-light alert-dismissible" role="alert">
+		<strong>{{data}}! </strong>{{message}}
+	</span>
+</div>
+
+<!-- BEGIN: Subheader -->
+<div class="m-subheader" appunwraptag="">
+	<!-- <div class="d-flex align-items-center"> -->
+		<div class="mr-auto col-12 col-sm-12 col-md-12 pl-3">
+			<!-- <div class="alert alert-info alert-dismissible fade show" role="alert">
+				<strong>Order Cancelled Successfully!</strong>
+			</div> -->	
+			<table class="table table-back">
+				<thead class="bg-darkblue text-light">
+				  <tr>
+					<th scope="col">Order ID</th>
+					<th scope="col">Type</th>
+					<th scope="col">Pair</th>
+					<th scope="col">Quantity</th>
+					<th scope="col">Side</th>
+					<th scope="col">Price</th>
+					<th scope="col">Status</th>
+					<th scope="col">Action</th>
+				  </tr>
+				</thead>
+				<tbody *ngFor="let item of TradeList | paginate:{id:'list_page',
+				itemsPerPage: 10,
+				currentPage: page,
+				totalItems: totalRecords
+			  }">
+				  <tr  *ngIf="!messagefornodata">
+					<th scope="row">{{item.id}}</th>
+					<td>{{item.order_type}}</td>
+					<td>{{item.currency_pair_code}}</td>
+					<td>{{item.quantity}}</td>
+					<td>{{item.side}}</td>	
+					<td>{{item.price}}</td>
+					<td >
+						<button class="btn btn-success smallbtn mr-2" *ngIf="item.status === 'filled'">Success</button>
+						<button class="btn btn-warning text-light smallbtn mr-2" *ngIf="item.status === 'live'">Pending</button>
+						<button class="btn btn-info text-light smallbtn mr-2" *ngIf="item.status === 'cancelled'">Cancelled</button>
+					</td>
+					<td *ngIf="item.status === 'live'">
+						<button class="btn btn-danger smallbtn" (click)="CancelOrder(item.id)">Cancel</button>
+					</td>
+				  </tr>
+				</tbody>
+				</table>
+			<div class="text-center font-size-13" *ngIf="messagefornodata">
+				No records found
+			</div>
+	</div>
+	<div class="text-center">
+		<pagination-controls id="list_page" maxSize="5" directionLinks=true (pageChange)="page = $event"></pagination-controls>
+	</div>
+</div> <!-- END: Subheader -->

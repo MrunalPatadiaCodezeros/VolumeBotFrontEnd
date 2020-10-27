@@ -1,0 +1,48 @@
+<div class="m-5">
+	<span class="h2">Bot Running History</span>
+	<span [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert mr-5 float-right text-light alert-dismissible" role="alert">
+		<strong>{{data}}! </strong>{{message}}
+	</span>
+</div>
+
+<!-- BEGIN: Subheader -->
+<div class="m-subheader" appunwraptag="">
+	<!-- <div class="d-flex align-items-center"> -->
+		<div class="mr-auto col-12 col-sm-12 col-md-12">
+			<!-- <div class="alert alert-info alert-dismissible fade show" role="alert">
+				<strong>Order Cancelled Successfully!</strong>
+			</div> -->	
+			<table class="table table-back">
+				<thead class="bg-darkblue text-light">
+				  <tr>
+					<th scope="col">ID</th>
+					<th scope="col">Start Time</th>
+					<th scope="col">End Time</th>
+					<th scope="col">Status</th>
+				  </tr>
+				</thead>
+				<tbody *ngFor="let item of TradeList | paginate:{id:'list_page',
+				itemsPerPage: 5,
+				currentPage: page,
+				totalItems: totalRecords
+			  }">
+				  <tr  *ngIf="!messagefornodata">
+					<th scope="row">{{item.jobId}}</th>
+					<td>{{item.jobStartTime}}</td>
+					<td>{{item.jobEndTime}}</td>
+					<td >
+						<button class="btn btn-success smallbtn mr-2" *ngIf="item.jobStatus === 'ACTIVE'">Active</button>
+						<button class="btn btn-info text-light smallbtn mr-2" *ngIf="item.jobStatus === 'COMPLETED'">Completed</button>
+						<button class="btn btn-danger text-light smallbtn mr-2" *ngIf="item.jobStatus === 'ERRORED'">Broken</button>
+					</td>
+				  </tr>
+				</tbody>
+				</table>
+			<div class="text-center font-size-13" *ngIf="messagefornodata">
+				No records found
+			</div>
+	</div>
+	<div class="text-center">
+		<pagination-controls id="list_page" maxSize="5" directionLinks=true (pageChange)="page = $event"></pagination-controls>
+	</div>
+</div> <!-- END: Subheader -->

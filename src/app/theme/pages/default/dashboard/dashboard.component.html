@@ -1,0 +1,56 @@
+<div class="m-5">
+	<span class="h2">Dashboard</span>
+	<!-- <span [ngClass]="alertsign" class="alert float-right mr-16" role="alert">
+      <strong>{{status}}</strong>
+      <button class="btn-transparent text-light float-right" (click)="GetBotStatus()"><i class="fas fa-redo"></i></button>
+  </span> -->
+</div>
+
+<!-- BEGIN: Subheader -->
+<div class="col-12 row pl-5">
+  <div class="col-12 col-md-4 col-sm-12">
+    <div class="card mb-3 mr-2">
+      <h5 class="card-header text-white bg-darkblue">PPP/BTC
+        <button class="btn-transparent text-light float-right" (click)="BitcoinPrice()">
+          <i class="m-menu__link-icon flaticon-refresh"></i>
+        </button>
+      </h5>
+      <div class="card-body">
+        <div *ngFor="let item of Bitcoin">
+          <!-- <h5 class="card-title">info card title</h5> -->
+          <b>Last Traded Price: </b><span class="card-text">{{item.last_traded_price}}</span><br><br>
+          <b>Average Price: </b><span class="card-text">{{item.average_price}}</span><br>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4 col-sm-12">
+    <div class="card mb-3 mr-2">
+      <h5 class="card-header text-white bg-darkblue">PPP/ETH
+        <button class="btn-transparent text-light float-right" (click)="EthereumPrice()"><i class="m-menu__link-icon flaticon-refresh"></i></button>
+      </h5>
+      <div class="card-body">
+        <!-- <h5 class="card-title">info card title</h5> -->
+        <div *ngFor="let item of Ethereum">
+          <b>Last Traded Price: </b><span class="card-text">{{item.last_traded_price}}</span><br><br>
+          <b>Average Price: </b><span class="card-text">{{item.average_price}}</span><br>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4 col-sm-12 ">
+    <div class="card mb-3 mr-2">
+      <h5 class="card-header text-white bg-darkblue">Wallet Balance
+        <button class="btn-transparent text-light float-right" (click)="AccountBalance()">
+          <i class="m-menu__link-icon flaticon-refresh"></i>
+        </button>
+      </h5>
+      <div class="card-body">
+        <!-- <h5 class="card-title">info card title</h5> -->
+        <p *ngFor="let item of Accountbalance">
+          <b>{{item.currency}}: </b><span class="card-text">{{item.balance}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>  <!-- END: Subheader -->
