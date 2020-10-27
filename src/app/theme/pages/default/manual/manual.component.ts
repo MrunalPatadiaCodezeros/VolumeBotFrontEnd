@@ -31,15 +31,16 @@ export class ManualComponent implements OnInit, AfterViewInit {
   alertclass;
   alertstopclass;
   stopmessage:any;
-  displaystyle = {
-    'display':"none"
-  };
-  displaystopstyle = {
-    'display':"none"
-  };
-  displayvalidmsg = {
-    'display':"none"
-  };
+  // Common Variable by ngx-toastr
+  // displaystyle = {
+  //   'display':"none"
+  // };
+  // displaystopstyle = {
+  //   'display':"none"
+  // };
+  // displayvalidmsg = {
+  //   'display':"none"
+  // };
   filter:any;
   orderstatusmsg:any;
   orderstatusclass;
@@ -50,48 +51,41 @@ export class ManualComponent implements OnInit, AfterViewInit {
   classPriceForm = "notDisplay"
   constructor(private _script: ScriptLoaderService, private _router:RouterResponseService)  {}
   
- 
-
-  // manualOrder = new FormGroup({
-  //   pair: new FormControl("PPP/ETH",Validators.required),
-  //   quantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-  //   price: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-  //   side: new FormControl("buy",Validators.required),
-  // });
-
-  // autoGenrateOrder :- autoVolumeGenratOrder
-  autoVolumeGenratOrder = new FormGroup({
-    pair: new FormControl("",Validators.required),
-    minimumVolumeQuantity: new FormControl("",Validators.required),
-    maximumVolumeQuantity: new FormControl("",Validators.required),
-    time: new FormControl("",[Validators.required,Validators.pattern('[1-24.]*')]),
-    // quantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    // price: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    // side: new FormControl("buy",Validators.required),
-  });
-
   // PPPETH Volume Genrat Order
-  autoPPPETHminimumVolumeGenratOrder = new FormGroup({
+  autoPPPETHVolumeGenratOrder = new FormGroup({
   PPPETHminimumVolumeQuantity: new FormControl("",Validators.required),
   PPPETHmaximumVolumeQuantity: new FormControl("",Validators.required),
   PPPETHtime: new FormControl("",Validators.required)
   });
-  get PPPETHminimumVolumeQuantity(){return this.autoVolumeGenratOrder.get("PPPETHminimumVolumeQuantity")};
-  get PPPETHmaximumVolumeQuantity(){return this.autoVolumeGenratOrder.get("PPPETHmaximumVolumeQuantity")};
-  get PPPETHtime(){return this.autoVolumeGenratOrder.get("PPPETHtime")};
+  get PPPETHminimumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHminimumVolumeQuantity")};
+  get PPPETHmaximumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHmaximumVolumeQuantity")};
+  get PPPETHtime(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHtime")};
 
-
-  autoPriceGenratOrder = new FormGroup({
-    pair: new FormControl("",Validators.required),
-    price: new FormControl(""),
-    time: new FormControl("",[Validators.required,Validators.pattern('[1-24.]*')])
+  // PPPBTC Volume Genrat Order
+  autoPPPBTCVolumeGenratOrder = new FormGroup({
+  PPPBTCminimumVolumeQuantity: new FormControl("",Validators.required),
+  PPPBTCmaximumVolumeQuantity: new FormControl("",Validators.required),
+  PPPBTCtime: new FormControl("",Validators.required)
   });
+  get PPPBTCminimumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCminimumVolumeQuantity")};
+  get PPPBTCmaximumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCmaximumVolumeQuantity")};
+  get PPPBTCtime(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCtime")};
 
-  // get pair(){return this.autoVolumeGenratOrder.get("pair")};
-  get minimumVolumeQuantity(){return this.autoVolumeGenratOrder.get("minimumVolumeQuantity")};
-  get maximumVolumeQuantity(){return this.autoVolumeGenratOrder.get("maximumVolumeQuantity")};
-  get time(){return this.autoVolumeGenratOrder.get("time")};
-  get price(){return this.autoVolumeGenratOrder.get("price")};
+  // PPPETH Price Genrat Order
+  autoPPPETHPriceGenratOrder = new FormGroup({
+  PPPETHprice: new FormControl("",Validators.required),
+  PPPETHtimeforprice: new FormControl("",Validators.required),
+  });
+  get PPPETHprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHprice")};
+  get PPPETHtimeforprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHtimeforprice")};
+
+  // PPPBTC Price Genrat Order
+  autoPPPBTCPriceGenratOrder = new FormGroup({
+  PPPBTCprice: new FormControl("",Validators.required),
+  PPPBTCtimeforprice: new FormControl("",Validators.required),
+  });
+  get PPPBTCprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCprice")};
+  get PPPBTCtimeforprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCtimeforprice")};
 
   OrderStatus = new FormGroup({
     order_id : new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
@@ -115,292 +109,227 @@ export class ManualComponent implements OnInit, AfterViewInit {
       this.classPriceForm = "notDisplay"
     }
   }
-  // startbotManual : function call API our URL: ''  
-  // startbotManual(orderDetails){
-  //   return this.http.post(this.api_url + "user/startBotManual",orderDetails);
-  // }
   
   StartPPPETHVolumeBot(ExPair){
     // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
-    this.autoVolumeGenratOrder.value.pair = ExPair.pair;
-    console.log('-->',this.autoVolumeGenratOrder.value);
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
     // Check Account Balance is Grater then Last Traded Price
     var responseAccountBalance;
     var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
     this._router.getAccountBalance().subscribe(res => {
-       console.log('-----res--from--getAccountBalance-------',res);
       let responseAccountBalanceObj = res['data'];
-       console.log('->',responseAccountBalanceObj);
       for (const element of responseAccountBalanceObj) {
           if(element.currency === "ETH"){
             responseAccountBalance = parseFloat(element.balance);
           }
       }
+      //call "exchange/getEthereumPrice"
+      this._router.getEthereumPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('else');
+          // Show Error Message Balance not require
+        }
+      })
     })
-
-
-
-    //   if(this.autoVolumeGenratOrder.value.pair == "PPP/ETH"){
-    //     this.filter = res["data"].find(element => element.currency == "ETH");
-    //     console.log('-this.filter->',this.filter);
-    //   }
-    //   else if(this.autoVolumeGenratOrder.value.pair == "PPP/BTC"){
-    //     this.filter = res["data"].find(element => element.currency == "BTC");
-    //     console.log('->',this.filter);
-    //   }
-    
-    // let accountBalance = res.balance;
-    this._router.getBitcoinPrice().subscribe((res) => {
-      console.log('getBitcoinPrice',res['average_price']);
-      currentPrice = parseFloat(res['average_price']);
-    })
-    // currentPrice = res.last_traded_price
-    console.log('->',responseAccountBalance);
-    console.log('->',currentPrice);
-    if(responseAccountBalance > currentPrice){
-        console.log('-------------------- TRUE ---------------');  
-    }else{
-      console.log('-------------------- FALSE ---------------')
-    }
-    // }) 
-    // // sample res -> {currency: "ETH", balance: "0.49733834"}
-    
-        this._router.startbotManual(this.autoVolumeGenratOrder.value)
-        .subscribe((res) => { 
-          this.message = res["message"];
-          this.alertclass = "alert-success";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        },
-        err => {
-          this.message = err.error["message"];
-          this.alertclass = "alert-danger";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        });
-        this.autoVolumeGenratOrder.reset();
-      // }
-    // });
   }
 
   StartPPPBTCVolumeBot(ExPair){
     // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
-    this.autoVolumeGenratOrder.value.pair = ExPair.pair;
-    console.log('-->',this.autoVolumeGenratOrder.value);
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
     // Check Account Balance is Grater then Last Traded Price
-    // this._router.getAccountBalance().subscribe(res => {
-    //   console.log('-----res-----',res);
-
-    //   if(this.autoVolumeGenratOrder.value.pair == "PPP/ETH"){
-    //     this.filter = res["data"].find(element => element.currency == "ETH");
-    //     console.log('-this.filter->',this.filter);
-    //   }
-    //   else if(this.autoVolumeGenratOrder.value.pair == "PPP/BTC"){
-    //     this.filter = res["data"].find(element => element.currency == "BTC");
-    //     console.log('->',this.filter);
-    //   }
-    // let currentPrice;
-    // let accountBalance = res.balance;
-    // this._router.startbotManual(this.autoVolumeGenratOrder.value).subscribe((res) => {
-    // currentPrice = res.last_traded_price
-    //  if(accountBalance > currentPrice){
-    //    PUT startbotManual Code  
-    //  }
-    // }) 
-    // // sample res -> {currency: "ETH", balance: "0.49733834"}
-    
-        this._router.startbotManual(this.autoVolumeGenratOrder.value)
-        .subscribe((res) => { 
-          this.message = res["message"];
-          this.alertclass = "alert-success";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        },
-        err => {
-          this.message = err.error["message"];
-          this.alertclass = "alert-danger";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        });
-        this.autoVolumeGenratOrder.reset();
-      // }
-    // });
+    var responseAccountBalance;
+    var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
+    this._router.getAccountBalance().subscribe(res => {
+      let responseAccountBalanceObj = res['data'];
+      for (const element of responseAccountBalanceObj) {
+          if(element.currency === "BTC"){
+            responseAccountBalance = parseFloat(element.balance);
+          }
+      }
+      //call "exchange/getBitcoinPrice"
+      this._router.getBitcoinPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('success');
+          // Show Error Message Balance not require
+        }
+      })
+    })
   }
 
 
-  StartPPPETHPriceBot(pair){
-    console.log('pair',pair)
+  StartPPPETHPriceBot(ExPair){
+    console.log('pair',ExPair)
+    // inputs:- pair,price,time
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    // Check Account Balance is Grater then Last Traded Price
+    var responseAccountBalance;
+    var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
+    this._router.getAccountBalance().subscribe(res => {
+      let responseAccountBalanceObj = res['data'];
+      for (const element of responseAccountBalanceObj) {
+          if(element.currency === "BTC"){
+            responseAccountBalance = parseFloat(element.balance);
+          }
+      }
+      //call "exchange/getEthereumPrice"
+      this._router.getEthereumPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('success');
+          // Show Error Message Balance not require
+        }
+      })
+    })  
+  }
+
+  StartPPPBTCPriceBot(ExPair){
+    console.log('pair',ExPair)
     // inputs:- pair,price,time  
-    // console.log('-->',this.autoPriceGenratOrder.value);
-    // this._router.getAccountBalance().subscribe(res => {
-    //   if(this.autoVolumeGenratOrder.value.pair == "PPP/ETH"){
-    //     this.filter = res["data"].find(element => element.currency == "ETH");
-    //   }
-    //   else if(this.autoVolumeGenratOrder.value.pair == "PPP/BTC"){
-    //     this.filter = res["data"].find(element => element.currency == "BTC");
-    //   }
-    //     this._router.startbotManual(this.autoVolumeGenratOrder.value)
-    //     .subscribe((res) => { 
-    //       this.message = res["message"];
-    //       this.alertclass = "alert-success";
-    //       this.displaystyle = {
-    //         "display":"block"
-    //       };
-    //       window.setTimeout(()=>{
-    //         this.displaystyle = {
-    //           "display":"none"
-    //         };
-    //       },10000);
-    //     },
-    //     err => {
-    //       this.message = err.error["message"];
-    //       this.alertclass = "alert-danger";
-    //       this.displaystyle = {
-    //         "display":"block"
-    //       };
-    //       window.setTimeout(()=>{
-    //         this.displaystyle = {
-    //           "display":"none"
-    //         };
-    //       },10000);
-    //     });
-    //     this.autoVolumeGenratOrder.reset();
-    // });
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    // Check Account Balance is Grater then Last Traded Price
+    var responseAccountBalance;
+    var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
+    this._router.getAccountBalance().subscribe(res => {
+      let responseAccountBalanceObj = res['data'];
+      for (const element of responseAccountBalanceObj) {
+          if(element.currency === "BTC"){
+            responseAccountBalance = parseFloat(element.balance);
+          }
+      }
+      //call "exchange/getBitcoinPrice"
+      this._router.getBitcoinPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('success');
+          // Show Error Message Balance not require
+        }
+      })
+    }) 
   }
 
-  StartPPPBTCPriceBot(pair){
-    console.log('pair',pair)
-    // inputs:- pair,price,time  
-    // console.log('-->',this.autoPriceGenratOrder.value);
-    // this._router.getAccountBalance().subscribe(res => {
-    //   if(this.autoVolumeGenratOrder.value.pair == "PPP/ETH"){
-    //     this.filter = res["data"].find(element => element.currency == "ETH");
-    //   }
-    //   else if(this.autoVolumeGenratOrder.value.pair == "PPP/BTC"){
-    //     this.filter = res["data"].find(element => element.currency == "BTC");
-    //   }
-    //     this._router.startbotManual(this.autoVolumeGenratOrder.value)
-    //     .subscribe((res) => { 
-    //       this.message = res["message"];
-    //       this.alertclass = "alert-success";
-    //       this.displaystyle = {
-    //         "display":"block"
-    //       };
-    //       window.setTimeout(()=>{
-    //         this.displaystyle = {
-    //           "display":"none"
-    //         };
-    //       },10000);
-    //     },
-    //     err => {
-    //       this.message = err.error["message"];
-    //       this.alertclass = "alert-danger";
-    //       this.displaystyle = {
-    //         "display":"block"
-    //       };
-    //       window.setTimeout(()=>{
-    //         this.displaystyle = {
-    //           "display":"none"
-    //         };
-    //       },10000);
-    //     });
-    //     this.autoVolumeGenratOrder.reset();
-    // });
-  }
-
-  StopBot(pair){
-    console.log('pair',pair);
+  StopBot(obj){
+    console.log('pair',obj.pair);
     this._router.Stopbot({
-      "pair": pair
+      "pair": obj.pair,
     //  "pair" : "PPP/ETH",
-    //  "side" : "sell"
+      "side" : obj.side
     })
     .subscribe(
       res => {
         this.stopmessage = res["message"];
         this.alertstopclass = "alert-success";
-        this.displaystopstyle = {
-          "display":"block"
-        };
-        window.setTimeout(()=>{
-          this.displaystopstyle = {
-            "display":"none"
-          };
-        },10000);
+        // this.displaystopstyle = {
+        //   "display":"block"
+        // };
+        // window.setTimeout(()=>{
+        //   this.displaystopstyle = {
+        //     "display":"none"
+        //   };
+        // },10000);
       },
       err=>{
         this.stopmessage = err["message"] ;
         this.alertstopclass = "alert-danger";
-        this.displaystopstyle = {
-          "display":"block"
-        };
-        window.setTimeout(()=>{
-          this.displaystopstyle = {
-            "display":"none"
-          };
-        },10000);
+        // this.displaystopstyle = {
+        //   "display":"block"
+        // };
+        // window.setTimeout(()=>{
+        //   this.displaystopstyle = {
+        //     "display":"none"
+        //   };
+        // },10000);
       }
     );
   }
  
-  getorder_id(){
-    this._router.getOrderStatus(this.OrderStatus.value)
-    .subscribe(
-    res=>{
-      if(res["data"].message){
-        this.orderstatusmsg = res["data"].message
-      }
-      else{
-        this.orderstatusmsg = "Order: " + res["data"].id + " is " + res["data"].status;
-      }
-        this.orderstatusclass = "alert-success";
-        this.orderstatus = {
-          "display":"block"
-        };
-        window.setTimeout(()=>{
-          this.orderstatus = {
-            "display":"none"
-          };
-        },10000);
-    },
-    err => {
-      console.log(err,"error");
-      
-      this.orderstatusmsg = err["data"] ;
-      this.orderstatusclass = "alert-danger";
-      this.orderstatus = {
-        "display":"block"
-      };
-      window.setTimeout(()=>{
-        this.orderstatus = {
-          "display":"none"
-        };
-      },10000);
-    })
-    this.OrderStatus.reset()
-  }
 }
