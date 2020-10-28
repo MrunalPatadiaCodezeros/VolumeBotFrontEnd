@@ -68,7 +68,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   autoPPPETHVolumeGenratOrder = new FormGroup({
   PPPETHminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
   PPPETHmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
-  PPPETHtime: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')])
+  PPPETHtime: new FormControl("",[Validators.required,Validators.pattern('^((?:[1-9]|1[0-9]|2[0-3])?)$')])
   });
   get PPPETHminimumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHminimumVolumeQuantity")};
   get PPPETHmaximumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHmaximumVolumeQuantity")};
