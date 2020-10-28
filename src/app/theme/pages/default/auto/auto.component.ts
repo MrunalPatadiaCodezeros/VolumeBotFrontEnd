@@ -312,8 +312,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
           });
           this.autoPPPETHPriceGenratOrder.reset();
         }else{
-          console.log('success');
-          // Show Error Message Balance not require
+          console.log('error');
+          this.toaster.error("Insufficient Balance");
+          this.autoPPPETHPriceGenratOrder.reset();
         }
       })
     })  
