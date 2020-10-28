@@ -128,9 +128,10 @@
                     <!-- Check [disabled]="pppethbuy.invalid"-->
                     <!-- Make [disabled]="autoVolumeGenratOrder.invalid" -->
                     <!-- Check *ngIf="!isETHbuyactive" -->
+                    <!-- *ngIf="isBTCVolumActive" -->
                     <button type="submit" [disabled]="autoPPPBTCVolumeGenratOrder.invalid" class="btn btn-darkblue mr-2 text-white">Place Order</button>                    
                     <!-- Check *ngIf="isETHbuyactive" -->
-                    <button type="button" *ngIf="isBTCVolumActive" class="btn btn-danger ml-2" style="position: absolute;" (click)="StopBot({pair:'PPP/BTC',side:'volume'})">Stop Bot</button>
+                    <button type="button"  class="btn btn-danger ml-2" style="position: absolute;" (click)="StopBot({pair:'PPP/BTC',side:'volume'})">Stop Bot</button>
                 </div> 
             </form>
             <!-- <div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-12" role="alert">
@@ -194,8 +195,9 @@
                 <div class="form-group mt-2rem col-md-3">
                     <!--check [disabled]="pppethbuy.invalid"-->
                     <!--(click)="StopBot({pair:'PPP/ETH',side:'buy'})"-->
+                    <!--*ngIf="isETHPriceActive"-->
                     <button type="submit" [disabled]="autoPPPETHPriceGenratOrder.invalid" class="btn btn-darkblue mr-2 text-white">Place Order</button>                 
-                    <button type="button" *ngIf="isETHPriceActive" style="position: absolute;" class="btn btn-danger ml-2" (click)="StopBot({pair:'PPP/ETH',side:'price'})" >Stop Bot</button>
+                    <button type="button"  style="position: absolute;" class="btn btn-danger ml-2" (click)="StopBot({pair:'PPP/ETH',side:'price'})" >Stop Bot</button>
                 </div> 
             </form>
             <!-- <div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-12" role="alert">
@@ -250,8 +252,9 @@
                 <div class="form-group mt-2rem col-md-3">
                     <!--check [disabled]="pppethbuy.invalid"-->
                     <!--(click)="StopBot({pair:'PPP/ETH',side:'buy'})  *ngIf="!isETHbuyactive""-->
+                    <!--*ngIf="isBTCPriceActive"-->
                     <button type="submit" [disabled]="autoPPPBTCPriceGenratOrder.invalid" class="btn btn-darkblue mr-2 text-white">Place Order</button>                 
-                    <button type="button" *ngIf="isBTCPriceActive" style="position: absolute;" class="btn btn-danger ml-2" (click)="StopBot({pair:'PPP/BTC',side:'price'})" >Stop Bot</button>
+                    <button type="button"  style="position: absolute;" class="btn btn-danger ml-2" (click)="StopBot({pair:'PPP/BTC',side:'price'})" >Stop Bot</button>
                 </div> 
             </form>
             <!-- <div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-12" role="alert">

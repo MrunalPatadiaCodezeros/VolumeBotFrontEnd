@@ -66,9 +66,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
   
   // PPPETH Volume Genrat Order
   autoPPPETHVolumeGenratOrder = new FormGroup({
-  PPPETHminimumVolumeQuantity: new FormControl("",Validators.required),
-  PPPETHmaximumVolumeQuantity: new FormControl("",Validators.required),
-  PPPETHtime: new FormControl("",Validators.required)
+  PPPETHminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPETHmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPETHtime: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
   });
   get PPPETHminimumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHminimumVolumeQuantity")};
   get PPPETHmaximumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHmaximumVolumeQuantity")};
@@ -76,9 +76,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
  
   // PPPBTC Volume Genrat Order
   autoPPPBTCVolumeGenratOrder = new FormGroup({
-  PPPBTCminimumVolumeQuantity: new FormControl("",Validators.required),
-  PPPBTCmaximumVolumeQuantity: new FormControl("",Validators.required),
-  PPPBTCtime: new FormControl("",Validators.required)
+  PPPBTCminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPBTCmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPBTCtime: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
   });
   get PPPBTCminimumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCminimumVolumeQuantity")};
   get PPPBTCmaximumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCmaximumVolumeQuantity")};
@@ -86,16 +86,16 @@ export class AutoComponent implements OnInit, AfterViewInit {
  
   // PPPETH Price Genrat Order
   autoPPPETHPriceGenratOrder = new FormGroup({
-  PPPETHprice: new FormControl("",Validators.required),
-  PPPETHtimeforprice: new FormControl("",Validators.required),
+  PPPETHprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPETHtimeforprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
   });
   get PPPETHprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHprice")};
   get PPPETHtimeforprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHtimeforprice")};
  
   // PPPBTC Price Genrat Order
   autoPPPBTCPriceGenratOrder = new FormGroup({
-  PPPBTCprice: new FormControl("",Validators.required),
-  PPPBTCtimeforprice: new FormControl("",Validators.required),
+  PPPBTCprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPBTCtimeforprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
   });
   get PPPBTCprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCprice")};
   get PPPBTCtimeforprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCtimeforprice")};
@@ -129,16 +129,23 @@ export class AutoComponent implements OnInit, AfterViewInit {
   }
  
   ngAfterViewInit()  {
+    console.log('----------REFRESH----------');
     // localstorage Value
     let stats = this.checkLocalstorage();
     console.log('---------checkLocalstorage---------',stats);
     // {"volume":getVolume,"price":getPrice}
     if(stats.price === 'true'){
+      console.log('stats.price',stats.price);
       this.checkedOrNot = true;
       this.botIsNotReady = false;
+      this.classVolumeForm = "notDisplay"
+      this.classPriceForm = ""
     }else if(stats.volume === 'true'){
+      console.log('stats.volume',stats.volume);
       this.checkedOrNot = false;
       this.botIsNotReady = false;
+      this.classVolumeForm = ""
+      this.classPriceForm = "notDisplay"
     }else{
       this.botIsNotReady = true;
     }
@@ -167,6 +174,8 @@ export class AutoComponent implements OnInit, AfterViewInit {
   }
   
   StartPPPETHVolumeBot(ExPair){
+    // remove if Checked this.isETHVolumActive
+    this.isETHVolumActive = true;
     this.botIsNotReady = false;
     this.setLocalstorage("volume");
     // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
@@ -215,6 +224,8 @@ export class AutoComponent implements OnInit, AfterViewInit {
   }
  
   StartPPPBTCVolumeBot(ExPair){
+    // remove if Checked this.isBTCVolumActive
+    this.isBTCVolumActive = true;
     // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
     this.setLocalstorage("volume");
     this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
@@ -263,6 +274,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
  
  
   StartPPPETHPriceBot(ExPair){
+        // remove if Checked this.isETHPriceActive
+        this.isETHPriceActive = true;
+    this.botIsNotReady = false;
     console.log('pair',ExPair)
     // inputs:- pair,price,time
     this.setLocalstorage("price");
@@ -311,6 +325,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
   }
  
   StartPPPBTCPriceBot(ExPair){
+    // remove if Checked this.isBTCPriceActive
+    this.isBTCPriceActive = true;
+    this.botIsNotReady = false;
     console.log('pair',ExPair)
     // inputs:- pair,price,time  
     this.setLocalstorage("price");
@@ -361,26 +378,46 @@ export class AutoComponent implements OnInit, AfterViewInit {
   StopBot(obj){
     this.checkModel
     let stopBotPair = obj.pair; // PPP/ETH
+    // remove as checked
+    if(stopBotPair == "PPP/ETH" && obj.side === 'volume'){
+      this.isETHVolumActive = false;
+    }else if(stopBotPair == "PPP/BTC" && obj.side === 'volume'){
+      this.isBTCVolumActive = false;
+    }
+    else if(stopBotPair == "PPP/ETH" && obj.side === 'price'){
+      this.isETHPriceActive = false;
+    }
+    else if(stopBotPair == "PPP/BTC" && obj.side === 'price'){
+      this.isBTCVolumActive = false;
+    }
     // check another bot is not running
     if(stopBotPair == "PPP/ETH" && obj.side === 'volume' && (this.isBTCVolumActive === undefined || this.isBTCVolumActive === false)){
       this.botIsNotReady = true;
       this.checkedOrNot = false; 
-      this.setLocalstorage('volume');
+      // this.setLocalstorage('volume');
+      localStorage.removeItem("volume");
+      localStorage.removeItem("price");
     }
     else if(stopBotPair == "PPP/BTC" && obj.side === 'volume' && (this.isETHVolumActive === undefined || this.isETHVolumActive === false )){
       this.botIsNotReady = true;
       this.checkedOrNot = false;
-      this.setLocalstorage('volume');
+      // this.setLocalstorage('volume');
+      localStorage.removeItem("volume");
+      localStorage.removeItem("price");
     }
     else if(stopBotPair == "PPP/ETH" && obj.side === 'price'&& (this.isBTCPriceActive === undefined || this.isBTCPriceActive === false )){
       this.botIsNotReady = true;
       this.checkedOrNot = true;
-      this.setLocalstorage('price');
+      // this.setLocalstorage('price');
+      localStorage.removeItem("volume");
+      localStorage.removeItem("price");
     }
     else if(stopBotPair == "PPP/BTC" && obj.side === 'price' && (this.isETHPriceActive === undefined || this.isETHPriceActive === false)){
       this.botIsNotReady = true;
       this.checkedOrNot = true;
-      this.setLocalstorage('price');
+      // this.setLocalstorage('price');
+      localStorage.removeItem("volume");
+      localStorage.removeItem("price");
     }
     let stopBotSide = obj.side; // volum 
     console.log('stopBotSide',stopBotSide);
@@ -389,7 +426,6 @@ export class AutoComponent implements OnInit, AfterViewInit {
     let stats = this.checkLocalstorage();
     console.log('stats',stats);
     // stats.volume = false;
-    // this.setLocalstorage('volume');
     stats = this.checkLocalstorage();
     // if volum then check for also for    this.isETHVolumActive, this.isBTCVolumActive,
     // if price then check for also for    this.isETHPriceActive, this.isBTCPriceActive
@@ -478,7 +514,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   // }
   checkLocalstorage(){
     let getVolume = JSON.parse(localStorage.getItem("volume"));
-    let getPrice = localStorage.getItem("price");
+    let getPrice = JSON.parse(localStorage.getItem("price"));
     let botstatus = {"volume":getVolume,"price":getPrice}
     console.log('-:getBot:-',botstatus);
     return botstatus; 
@@ -487,11 +523,11 @@ export class AutoComponent implements OnInit, AfterViewInit {
     // botStatus = [{runningBot:[isETHVolumActive,isBTCVolumActive]},{checkboxValue:true}]
     // volume:true|false,price:true|false
     if(bot === "volume"){
-      localStorage.setItem("volume", JSON.stringify(true));
-      localStorage.setItem("price", JSON.stringify(false));
+      localStorage.setItem("volume", JSON.stringify("true"));
+      localStorage.setItem("price", JSON.stringify("false"));
     }else if(bot === "price"){
-      localStorage.setItem("volume", JSON.stringify(false));
-      localStorage.setItem("price", JSON.stringify(true));
+      localStorage.setItem("volume", JSON.stringify("false"));
+      localStorage.setItem("price", JSON.stringify("true"));
     }
   }
 }
