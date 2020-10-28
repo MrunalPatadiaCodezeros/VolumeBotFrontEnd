@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pluto": {
+    "Crypto_Bot": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/pluto",
+            "outputPath": "dist/Crypto_Bot",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -50,18 +50,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pluto:build"
+            "browserTarget": "Crypto_Bot:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "pluto:build:production"
+              "browserTarget": "Crypto_Bot:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pluto:build"
+            "browserTarget": "Crypto_Bot:build"
           }
         },
         "test": {
@@ -95,7 +95,7 @@
         }
       }
     },
-    "pluto-e2e": {
+    "Crypto_Bot-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -103,11 +103,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "pluto:serve"
+            "devServerTarget": "Crypto_Bot:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "pluto:serve:production"
+              "devServerTarget": "Crypto_Bot:serve:production"
             }
           }
         },
@@ -123,5 +123,5 @@
       }
     }
   },
-  "defaultProject": "pluto"
+  "defaultProject": "Crypto_Bot"
 }

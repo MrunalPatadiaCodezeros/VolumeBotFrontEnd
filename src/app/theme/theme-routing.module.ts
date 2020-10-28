@@ -13,31 +13,23 @@ const routes: Routes = [
                 "path": "index",
                 "loadChildren": "./pages/default/dashboard/dashboard.module#DashboardModule"
             },
-            // {
-            //     "path": "auto",
-            //     "loadChildren": "./pages/default/auto/auto.module#AutoModule"
-            // },
             {
-                "path": "autobotOrderHistory",
-                "loadChildren": "./pages/default/autobotOrderHistory/autobotOrderHistory.module#autobotOrderHistoryModule"
+                "path": "manual",
+                "loadChildren": "./pages/default/manual/manual.module#ManualModule"
+            },
+            {
+                "path": "auto",
+                "loadChildren": "./pages/default/auto/auto.module#AutoModule"
             },
             {
                 "path": "orderbook",
                 "loadChildren": "./pages/default/orderbook/orderbook.module#orderbookModule"
             },
-            // change Made name of Auto Load Manual
             {
-                "path": "auto",
-                "loadChildren": "./pages/default/manual/manual.module#ManualModule"
+                "path": "autobotOrderHistory",
+                "loadChildren": "./pages/default/autobotOrderHistory/autobotOrderHistory.module#autobotOrderHistoryModule"
             },
-            // {
-            //     "path": "Manual",
-            //     "loadChildren": "./pages/default/manual/manual.module#ManualModule"
-            // },
-            // {
-            //     "path": "history",
-            //     "loadChildren": "./pages/default/history/history.module#HistoryModule"
-            // },
+            
             {
                 "path": "angular/ng-bootstrap",
                 "loadChildren": "./pages/default/angular/ng-bootstrap/ng-bootstrap.module#NgBootstrapModule"
@@ -637,34 +629,6 @@ const routes: Routes = [
             {
                 "path": "crud/datatables/search-options/advanced-search",
                 "loadChildren": "./pages/default/crud/datatables/search-options/search-options-advanced-search/search-options-advanced-search.module#SearchOptionsAdvancedSearchModule"
-            },
-            {
-                "path": "snippets/general/pricing-tables/pricing-table-1",
-                "loadChildren": "./pages/aside-left-minimize-default-enabled/snippets/general/pricing-tables/pricing-tables-pricing-table-1/pricing-tables-pricing-table-1.module#PricingTablesPricingTable1Module"
-            },
-            {
-                "path": "snippets/general/pricing-tables/pricing-table-2",
-                "loadChildren": "./pages/aside-left-minimize-default-enabled/snippets/general/pricing-tables/pricing-tables-pricing-table-2/pricing-tables-pricing-table-2.module#PricingTablesPricingTable2Module"
-            },
-            {
-                "path": "snippets/general/pricing-tables/pricing-table-3",
-                "loadChildren": "./pages/aside-left-minimize-default-enabled/snippets/general/pricing-tables/pricing-tables-pricing-table-3/pricing-tables-pricing-table-3.module#PricingTablesPricingTable3Module"
-            },
-            {
-                "path": "snippets/general/pricing-tables/pricing-table-4",
-                "loadChildren": "./pages/aside-left-minimize-default-enabled/snippets/general/pricing-tables/pricing-tables-pricing-table-4/pricing-tables-pricing-table-4.module#PricingTablesPricingTable4Module"
-            },
-            {
-                "path": "snippets/faq/faq-1",
-                "loadChildren": "./pages/default/snippets/faq/faq-faq-1/faq-faq-1.module#FaqFaq1Module"
-            },
-            {
-                "path": "snippets/invoices/invoice-1",
-                "loadChildren": "./pages/default/snippets/invoices/invoices-invoice-1/invoices-invoice-1.module#InvoicesInvoice1Module"
-            },
-            {
-                "path": "snippets/invoices/invoice-2",
-                "loadChildren": "./pages/default/snippets/invoices/invoices-invoice-2/invoices-invoice-2.module#InvoicesInvoice2Module"
             },
             {
                 "path": "header/actions",

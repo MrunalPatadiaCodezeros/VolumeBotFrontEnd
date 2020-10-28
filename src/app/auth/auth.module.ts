@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import {BaseRequestOptions, HttpModule} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 
@@ -13,18 +13,22 @@ import {AlertService} from './_services/alert.service';
 import {AuthenticationService} from './_services/authentication.service';
 import {UserService} from './_services/user.service';
 import {fakeBackendProvider} from './_helpers/index';
+import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
+
 
 @NgModule({
   declarations: [
     AuthComponent,
     AlertComponent,
     LogoutComponent,
+    ResetpasswordComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     HttpModule,
     AuthRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthGuard,

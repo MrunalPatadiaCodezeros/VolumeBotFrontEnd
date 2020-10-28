@@ -24,5 +24,9 @@ export class AppComponent implements OnInit {
 				Helpers.setLoading(false);
 			}
 		});
+		window.setTimeout(()=>{
+			localStorage.removeItem("currentUser")	
+			localStorage.removeItem("currentUserdetails")	
+		},4.32e+7);
 	}
 }

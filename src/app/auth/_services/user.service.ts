@@ -1,11 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Headers, Http, RequestOptions, Response} from "@angular/http";
+import {HttpClient} from "@angular/common/http"
 
 import {User} from "../_models/index";
 
 @Injectable()
 export class UserService {
-	constructor(private http: Http) {
+	constructor(private http: Http, private httpclient : HttpClient) {
 	}
 
 	verify() {
@@ -13,7 +14,8 @@ export class UserService {
 	}
 
 	forgotPassword(email: string) {
-		return this.http.post('/api/forgot-password', JSON.stringify({email}), this.jwt()).map((response: Response) => response.json());
+		return this.httpclient.post('http://68.183.94.224:4000/tradebot/api/v1/user/forgotPassword', ({user_email:email}));
+		// return this.httpclient.put('http://localhost:3000/users/forget-password', ({email}), this.jwt()).map((response) => response.json());
 	}
 
 	getAll() {

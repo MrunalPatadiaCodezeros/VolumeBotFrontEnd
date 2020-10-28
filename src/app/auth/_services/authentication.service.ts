@@ -1,27 +1,40 @@
 import {Injectable} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {HttpClient} from "@angular/common/http"
+import {map} from "rxjs/operators";
+import { Observable } from 'rxjs';
 import "rxjs/add/operator/map";
+
+interface tokenResponse{ 
+	token:string
+  }
 
 @Injectable()
 export class AuthenticationService {
 
-	constructor(private http: Http) {
-	}
+	constructor(private http: HttpClient) {
+	}	
+	login(email: string, password: string): Observable<any> {
+		const user = {
+			user_email: email,
+			user_password: password
+		};
+		const base = this.http.post('http://localhost:3000/tradebot/api/v1/user/loginUser',user);
+		const request = base.pipe( 
+			map((data:tokenResponse) => {
 
-	login(email: string, password: string) {
-		return this.http.post('/api/authenticate', JSON.stringify({email: email, password: password}))
-			.map((response: Response) => {
-				// login successful if there's a jwt token in the response
-				let user = response.json();
-				if (user && user.token) {
-					// store user details and jwt token in local storage to keep user logged in between page refreshes
-					localStorage.setItem('currentUser', JSON.stringify(user));
+				if(data["data"].token){
+					localStorage.setItem('currentUser', JSON.stringify(data["data"].token));
+					localStorage.setItem('currentUserdetails',JSON.stringify(data["data"].user));
 				}
-			});
+				return data;
+			})
+		);
+		return request;
 	}
 
 	logout() {
 		// remove user from local storage to log user out
 		localStorage.removeItem('currentUser');
+		localStorage.removeItem('currentUserdetails');
 	}
 }

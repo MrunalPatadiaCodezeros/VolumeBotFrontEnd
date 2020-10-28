@@ -58,15 +58,37 @@ export class AuthComponent implements OnInit {
   signin() {
     this.loading = true;
     this._authService.login(this.model.email, this.model.password).subscribe(
-        data => {
+      data => {
+        if(data["status"] === 200){
           this._router.navigate([this.returnUrl]);
-        },
-        error => {
+        }
+        else if (data["status"] === 400){
           this.showAlert('alertSignin');
-          this._alertService.error(error);
-          this.loading = false;
-        });
+          this._alertService.error(data["message"]);
+          this.loading = false;  
+        }
+        else if(data["status"] === 404){
+          this.showAlert('alertSignin');
+          this._alertService.error(data["message"]);
+          this.loading = false;  
+        }
+        // this._router.navigate([this.returnUrl]);
+    },
+    error => {
+        this.showAlert('alertSignin');
+        this._alertService.error("Internal Server Error");
+        this.loading = false; 
+    });
   }
+      // data => {
+      //   debugger
+      //   this._router.navigate([this.returnUrl])
+      // },
+      // error => {
+      //   this.showAlert('alertSignin');
+      //   this._alertService.error(error);
+      //   this.loading = false;
+    // });
 
   signup() {
     this.loading = true;
@@ -90,20 +112,20 @@ export class AuthComponent implements OnInit {
   forgotPass() {
     this.loading = true;
     this._userService.forgotPassword(this.model.email).subscribe(
-        data => {
-          this.showAlert('alertSignin');
-          this._alertService.success(
-              'Cool! Password recovery instruction has been sent to your email.',
-              true);
-          this.loading = false;
-          this.displaySignInForm();
-          this.model = {};
-        },
-        error => {
-          this.showAlert('alertForgotPass');
-          this._alertService.error(error);
-          this.loading = false;
-        });
+      data => {
+        this.showAlert('alertSignin');
+        this._alertService.success(
+            'Cool! Password recovery instruction has been sent to your email.',
+            true);
+        this.loading = false;
+        this.displaySignInForm();
+        this.model = {};
+      },
+      error => {
+        this.showAlert('alertForgotPass');
+        this._alertService.error(error.error["message"]);
+        this.loading = false;
+      });
   }
 
   showAlert(target) {

@@ -6,9 +6,8 @@ import {HttpClient} from "@angular/common/http"
 })
 export class RouterResponseService {
  
-  // api_url = "http://68.183.94.224:4000/tradebot/api/v1/";
-  api_url = "http://127.0.0.1:3000/tradebot/api/v1/"; 
-
+  api_url = "http://localhost:3000/tradebot/api/v1/"; 
+  
   constructor(private http:HttpClient) { }
 
   getBitcoinPrice(){
@@ -24,18 +23,14 @@ export class RouterResponseService {
   }
 
   startbotManual(orderDetails){
-    // return this.http.post(this.api_url + "user/startBotManual",orderDetails);
-    console.log('orderDetails from router-response.service.ts',orderDetails);
-    return this.http.post(this.api_url + "user/startBotAutomatic",orderDetails);
+    return this.http.post(this.api_url + "user/startBotManual",orderDetails);
   }
 
   startbotAuto(orderDetails){
-    console.log('orderDetails',orderDetails);
     return this.http.post(this.api_url + "user/startBotAutomatic",orderDetails);
   }
 
   Stopbot(botpair){
-    console.log('botpair',botpair);
     return this.http.post(this.api_url + "user/stopBot",botpair);
   }
 

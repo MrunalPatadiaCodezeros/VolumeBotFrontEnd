@@ -1,328 +1,497 @@
-// import { Component, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
-// import { Helpers } from '../../../../helpers';
-// import { ScriptLoaderService } from '../../../../_services/script-loader.service';
-
-
-// @Component({
-// selector: "app-auto",
-// templateUrl: "./auto.component.html",
-// encapsulation: ViewEncapsulation.None,
-// })
-// export class AutoComponent implements OnInit, AfterViewInit {
-
-
-// constructor(private _script: ScriptLoaderService)  {
-
-// }
-// ngOnInit()  {
-
-// }
-// ngAfterViewInit()  {
-// }
-
-// }
+import { Response } from '@angular/http';
 import { Component, OnInit, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { FormControl,FormGroup,Validators } from "@angular/forms";
 import { Helpers } from '../../../../helpers';
 import { ScriptLoaderService } from '../../../../_services/script-loader.service';
 import { RouterResponseService } from '../../../../_services/router-response.service';
-
+import { first } from 'rxjs-compat/operator/first';
+ 
+ 
 @Component({
 selector: "app-auto",
 templateUrl: "./auto.component.html",
 encapsulation: ViewEncapsulation.None,
 })
+ 
+/**
+ * Main Changes in .ts File
+ * <!-- formGroup :- manualOrder : autoVolumeGenratOrder-&-autoPriceGenratOrder----------------------------------------------------------------|complete| -->
+ * <!-- (ngSubmit)="StartBotManual() change to StartVolumeBotManual,StartPriceBotManual -->
+ * <!-- CHANGES IN textbox minimumVolume and maximunVolume both -->
+ * <!-- id="inputQuantity" to minimumVolume || maximunVolume at 7 lable(for) input(id) -->
+ * <!-- formControlName="quantity" to minimumVolumeQuantity with *ngIf also -->
+ * <!-- id="inputPrice" to inputTime formControlName="price" to Time -->
+ * <!-- Change place Order buTTON *ngIf condition-----------------cHECK-isETHbuyactive--------------------------------|pENDING| -->
+ * <!-- Change place Order buTTON click (click)="StopBot({pair:'PPP/ETH',side:'buy'})"--------------------------------|pENDING| -->
+ * Change in StartVolumeBotManual,StartPriceBotManual functions,
+ * *** [check] changeVolumeAndPriceGenrator,StopBot,getorder_id
+ */
 export class AutoComponent implements OnInit, AfterViewInit {
   message:any;
   alertclass;
   alertstopclass;
   stopmessage:any;
-  displaystyle = {
-    'display':"none"
-  };
-  displayvalidmsg = {
-    "display":"none"
-  };
-  displaystopstyle = {
-    "display":"none"
-  };
+  botIsNotReady:any;
+  checkedOrNot:any;
+  // Common Variable by ngx-toastr
+  // displaystyle = {
+  //   'display':"none"
+  // };
+  // displaystopstyle = {
+  //   'display':"none"
+  // };
+  // displayvalidmsg = {
+  //   'display':"none"
+  // };
   isETHbuyactive;
   isETHsellactive;
   isBTCbuyactive;
   isBTCsellactive;
+ 
+  isETHVolumActive;
+  isETHPriceActive;
+  isBTCVolumActive;
+  isBTCPriceActive;
+ 
   filter:any;
-  dataerror:any;
-  
-  pppethbuy = new FormGroup({
-    pppethbuypair: new FormControl("PPP/ETH",Validators.required),
-    pppethbuyminquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethbuymaxquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethbuyminRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethbuymaxRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethbuyside: new FormControl("buy",Validators.required),
-    pppethbuynoOfTrades: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
-  });
-  get pppethbuyminquantity(){return this.pppethbuy.get("pppethbuyminquantity")};
-  get pppethbuymaxquantity(){return this.pppethbuy.get("pppethbuymaxquantity")};
-  get pppethbuyminRange(){return this.pppethbuy.get("pppethbuyminRange")};
-  get pppethbuymaxRange(){return this.pppethbuy.get("pppethbuymaxRange")};
-  get pppethbuynoOfTrades(){return this.pppethbuy.get("pppethbuynoOfTrades")};
-
-  pppethsell = new FormGroup({
-    pppethsellpair: new FormControl("PPP/ETH",Validators.required),
-    pppethsellminquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethsellmaxquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethsellminRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethsellmaxRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppethsellside: new FormControl("sell",Validators.required),
-    pppethsellnoOfTrades: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
-  });
-  get pppethsellminquantity(){return this.pppethsell.get("pppethsellminquantity")};
-  get pppethsellmaxquantity(){return this.pppethsell.get("pppethsellmaxquantity")};
-  get pppethsellminRange(){return this.pppethsell.get("pppethsellminRange")};
-  get pppethsellmaxRange(){return this.pppethsell.get("pppethsellmaxRange")};
-  get pppethsellnoOfTrades(){return this.pppethsell.get("pppethsellnoOfTrades")};
-
-  pppbtcbuy = new FormGroup({
-    pppbtcbuypair: new FormControl("PPP/BTC",Validators.required),
-    pppbtcbuyminquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcbuymaxquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcbuyminRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcbuymaxRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcbuyside: new FormControl("buy",Validators.required),
-    pppbtcbuynoOfTrades: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
-  });
-  get pppbtcbuyminquantity(){return this.pppbtcbuy.get("pppbtcbuyminquantity")};
-  get pppbtcbuymaxquantity(){return this.pppbtcbuy.get("pppbtcbuymaxquantity")};
-  get pppbtcbuyminRange(){return this.pppbtcbuy.get("pppbtcbuyminRange")};
-  get pppbtcbuymaxRange(){return this.pppbtcbuy.get("pppbtcbuymaxRange")};
-  get pppbtcbuynoOfTrades(){return this.pppbtcbuy.get("pppbtcbuynoOfTrades")};
-
-  pppbtcsell = new FormGroup({
-    pppbtcsellpair: new FormControl("PPP/BTC",Validators.required),
-    pppbtcsellminquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcsellmaxquantity: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcsellminRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcsellmaxRange: new FormControl("",[Validators.required,Validators.pattern('[0-9.]*')]),
-    pppbtcsellside: new FormControl("sell",Validators.required),
-    pppbtcsellnoOfTrades: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
-  });
-  get pppbtcsellminquantity(){return this.pppbtcsell.get("pppbtcsellminquantity")};
-  get pppbtcsellmaxquantity(){return this.pppbtcsell.get("pppbtcsellmaxquantity")};
-  get pppbtcsellminRange(){return this.pppbtcsell.get("pppbtcsellminRange")};
-  get pppbtcsellmaxRange(){return this.pppbtcsell.get("pppbtcsellmaxRange")};
-  get pppbtcsellnoOfTrades(){return this.pppbtcsell.get("pppbtcsellnoOfTrades")};
-
+  orderstatusmsg:any;
+  orderstatusclass;
+  orderstatus = {
+    'display':"none"
+  }
+  checkModel:any
+  classVolumeForm = ""
+  classPriceForm = "notDisplay"
   constructor(private _script: ScriptLoaderService, private _router:RouterResponseService)  {}
-  ngOnInit()  {
-    window.setInterval(()=>{
+  
+  // PPPETH Volume Genrat Order
+  autoPPPETHVolumeGenratOrder = new FormGroup({
+  PPPETHminimumVolumeQuantity: new FormControl("",Validators.required),
+  PPPETHmaximumVolumeQuantity: new FormControl("",Validators.required),
+  PPPETHtime: new FormControl("",Validators.required)
+  });
+  get PPPETHminimumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHminimumVolumeQuantity")};
+  get PPPETHmaximumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHmaximumVolumeQuantity")};
+  get PPPETHtime(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHtime")};
+ 
+  // PPPBTC Volume Genrat Order
+  autoPPPBTCVolumeGenratOrder = new FormGroup({
+  PPPBTCminimumVolumeQuantity: new FormControl("",Validators.required),
+  PPPBTCmaximumVolumeQuantity: new FormControl("",Validators.required),
+  PPPBTCtime: new FormControl("",Validators.required)
+  });
+  get PPPBTCminimumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCminimumVolumeQuantity")};
+  get PPPBTCmaximumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCmaximumVolumeQuantity")};
+  get PPPBTCtime(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCtime")};
+ 
+  // PPPETH Price Genrat Order
+  autoPPPETHPriceGenratOrder = new FormGroup({
+  PPPETHprice: new FormControl("",Validators.required),
+  PPPETHtimeforprice: new FormControl("",Validators.required),
+  });
+  get PPPETHprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHprice")};
+  get PPPETHtimeforprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHtimeforprice")};
+ 
+  // PPPBTC Price Genrat Order
+  autoPPPBTCPriceGenratOrder = new FormGroup({
+  PPPBTCprice: new FormControl("",Validators.required),
+  PPPBTCtimeforprice: new FormControl("",Validators.required),
+  });
+  get PPPBTCprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCprice")};
+  get PPPBTCtimeforprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCtimeforprice")};
+ 
+  OrderStatus = new FormGroup({
+    order_id : new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
+  });
+  get order_id(){return this.OrderStatus.get("order_id")};
+ 
+  ngOnInit(){
+    let stats = this.checkLocalstorage();
+    this.botIsNotReady = true;
+    // if(stats.volume == null && stats.price == null){
+    //   this.botIsNotReady = false;
+    // }
+    console.log('---------checkLocalstorage---------',stats);
+    // console.log('-Bot>',localStorage.getItem("Bot"));
+    // console.log('-Checkbox>',localStorage.getItem("Checkbox"));
+    // localStorage.setItem("Bot", "JavaScript");
+    // localStorage.setItem("Checkbox", "true");
+    // window.setInterval(()=>{
       this._router.getBotStatus()
       .subscribe(res=>{
         console.log(typeof(JSON.parse(res["data"].ethBuyBot)));
-        this.isETHbuyactive = JSON.parse(res["data"].ethBuyBot);
-        this.isETHsellactive = JSON.parse(res["data"].ethSellBot);
-        this.isBTCbuyactive = JSON.parse(res["data"].btcBuyBot);
-        this.isBTCsellactive = JSON.parse(res["data"].btcSellBot);
+        this.isETHVolumActive = JSON.parse(res["data"].ethVolumBot);
+        this.isETHPriceActive = JSON.parse(res["data"].ethPriceBot);
+        this.isBTCVolumActive = JSON.parse(res["data"].btcVolumBot);
+        this.isBTCPriceActive = JSON.parse(res["data"].btcPriceBot);
       });
-    },2000)
-  };
+    //},2000)
+  }
+ 
   ngAfterViewInit()  {
+    // localstorage Value
+    let stats = this.checkLocalstorage();
+    console.log('---------checkLocalstorage---------',stats);
+    // {"volume":getVolume,"price":getPrice}
+    if(stats.price === 'true'){
+      this.checkedOrNot = true;
+      this.botIsNotReady = false;
+    }else if(stats.volume === 'true'){
+      this.checkedOrNot = false;
+      this.botIsNotReady = false;
+    }else{
+      this.botIsNotReady = true;
+    }
     this._router.getBotStatus()
     .subscribe(res=>{
-      console.log(typeof(JSON.parse(res["data"].ethBuyBot)));
-      this.isETHbuyactive = JSON.parse(res["data"].ethBuyBot);
-      this.isETHsellactive = JSON.parse(res["data"].ethSellBot);
-      this.isBTCbuyactive = JSON.parse(res["data"].btcBuyBot);
-      this.isBTCsellactive = JSON.parse(res["data"].btcSellBot);
+      // console.log(typeof(JSON.parse(res["data"].ethBuyBot)));
+      this.isETHVolumActive = JSON.parse(res["data"].ethVolumBot);
+      this.isETHPriceActive = JSON.parse(res["data"].ethPriceBot);
+      this.isBTCVolumActive = JSON.parse(res["data"].btcVolumBot);
+      this.isBTCPriceActive = JSON.parse(res["data"].btcPriceBot);
     });
-  };
-  // Automatic steps
-  // 1) get All  Values From Form
-  // 2) call method
-  //    startbotAuto(orderDetails){ return this.http.post(this.api_url + "user/startBotAutomatic",orderDetails); }
-  //    res get message and set class and style
-
-  startPPPETHbuy(){
-    // get All  Values From Form
-    var autoObjETHbuy = {
-      pair: this.pppethbuy.value.pppethbuypair,
-      minQuantity: this.pppethbuy.value.pppethbuyminquantity,
-      maxQuantity: this.pppethbuy.value.pppethbuymaxquantity,
-      minRange: this.pppethbuy.value.pppethbuyminRange,
-      maxRange: this.pppethbuy.value.pppethbuymaxRange,
-      side: this.pppethbuy.value.pppethbuyside,
-      noOfTrades: this.pppethbuy.value.pppethbuynoOfTrades,
-    }
-    // call method
-    // startbotAuto(orderDetails){ return this.http.post(this.api_url + "user/startBotAutomatic",orderDetails); }
-    // res get message and set class and style
-    this._router.startbotAuto(autoObjETHbuy)
-      .subscribe((res) => {
-          this.message = res["message"];
-          this.alertclass = "alert-success";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        },
-        err => {
-          this.message = err.error["message"];
-          this.alertclass = "alert-danger";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-      });
-      this.pppethbuy.reset();
   }
-
-  startPPPETHsell(){
-    var autoObjETHsell = {
-      pair: this.pppethsell.value.pppethsellpair,
-      minQuantity: this.pppethsell.value.pppethsellminquantity,
-      maxQuantity: this.pppethsell.value.pppethsellmaxquantity,
-      minRange: this.pppethsell.value.pppethsellminRange,
-      maxRange: this.pppethsell.value.pppethsellmaxRange,
-      side: this.pppethsell.value.pppethsellside,
-      noOfTrades: this.pppethsell.value.pppethsellnoOfTrades,
+  
+  changeVolumeAndPriceGenrator(event){
+    console.log(event.target.checked);
+    this.checkModel = event.target.checked;
+    event.target.unchecked 
+    console.log('-----------this.checkModel--------------',this.checkModel);
+    if (event.target.checked){
+      this.classVolumeForm = "notDisplay"
+      this.classPriceForm = ""
+    }else {
+      this.classVolumeForm = ""
+      this.classPriceForm = "notDisplay"
     }
-    this._router.startbotAuto(autoObjETHsell)
-      .subscribe((res) => {
-          this.message = res["message"];
-          this.alertclass = "alert-success";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        },
-        err => {
-          this.message = err.error["message"];
-          this.alertclass = "alert-danger";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-      });
-      this.pppethsell.reset();
+  }
+  
+  StartPPPETHVolumeBot(ExPair){
+    this.botIsNotReady = false;
+    this.setLocalstorage("volume");
+    // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    // Check Account Balance is Grater then Last Traded Price
+    var responseAccountBalance;
+    var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
+    this._router.getAccountBalance().subscribe(res => {
+      let responseAccountBalanceObj = res['data'];
+      for (const element of responseAccountBalanceObj) {
+          if(element.currency === "ETH"){
+            responseAccountBalance = parseFloat(element.balance);
+          }
+      }
+      //call "exchange/getEthereumPrice"
+      this._router.getEthereumPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('else');
+          // Show Error Message Balance not require
+        }
+      })
+    })
+  }
+ 
+  StartPPPBTCVolumeBot(ExPair){
+    // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
+    this.setLocalstorage("volume");
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    // Check Account Balance is Grater then Last Traded Price
+    var responseAccountBalance;
+    var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
+    this._router.getAccountBalance().subscribe(res => {
+      let responseAccountBalanceObj = res['data'];
+      for (const element of responseAccountBalanceObj) {
+          if(element.currency == "BTC"){
+            responseAccountBalance = parseFloat(element.balance);
+          }
+      }
+      //call "exchange/getBitcoinPrice"
+      this._router.getBitcoinPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('success');
+          // Show Error Message Balance not require
+        }
+      })
+    })
+  }
+ 
+ 
+  StartPPPETHPriceBot(ExPair){
+    console.log('pair',ExPair)
+    // inputs:- pair,price,time
+    this.setLocalstorage("price");
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    // Check Account Balance is Grater then Last Traded Price
+    var responseAccountBalance;
+    var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
+    this._router.getAccountBalance().subscribe(res => {
+      let responseAccountBalanceObj = res['data'];
+      for (const element of responseAccountBalanceObj) {
+          if(element.currency === "BTC"){
+            responseAccountBalance = parseFloat(element.balance);
+          }
+      }
+      //call "exchange/getEthereumPrice"
+      this._router.getEthereumPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('success');
+          // Show Error Message Balance not require
+        }
+      })
+    })  
+  }
+ 
+  StartPPPBTCPriceBot(ExPair){
+    console.log('pair',ExPair)
+    // inputs:- pair,price,time  
+    this.setLocalstorage("price");
+    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    // Check Account Balance is Grater then Last Traded Price
+    var responseAccountBalance;
+    var currentPrice;
+    var minimumRequireBalance;
+    // call exchange/getAccountBalance
+    this._router.getAccountBalance().subscribe(res => {
+      let responseAccountBalanceObj = res['data'];
+      for (const element of responseAccountBalanceObj) {
+          if(element.currency === "BTC"){
+            responseAccountBalance = parseFloat(element.balance);
+          }
+      }
+      //call "exchange/getBitcoinPrice"
+      this._router.getBitcoinPrice().subscribe((res) => {
+        currentPrice = parseFloat(res['data'][0].average_price);
+        // 10 orders are place in one batch 
+        minimumRequireBalance = currentPrice * 10; 
+        console.log('responseAccountBalance',responseAccountBalance);
+        console.log('currentPrice',currentPrice);
+        console.log('minimumRequireBalance',minimumRequireBalance);
+        if(responseAccountBalance > minimumRequireBalance){
+          console.log('success');
+        //call user/startBotManual    
+          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          .subscribe((res) => { 
+            this.message = res["message"];
+            this.alertclass = "alert-success";
+            // Show res success message
+          },
+          err => {
+            this.message = err.error["message"];
+            this.alertclass = "alert-danger";
+            // Show res Error message
+          });
+          this.autoPPPETHVolumeGenratOrder.reset();
+        }else{
+          console.log('success');
+          // Show Error Message Balance not require
+        }
+      })
+    }) 
+  }
+ 
+  StopBot(obj){
+    this.checkModel
+    let stopBotPair = obj.pair; // PPP/ETH
+    // check another bot is not running
+    if(stopBotPair == "PPP/ETH" && obj.side === 'volume' && (this.isBTCVolumActive === undefined || this.isBTCVolumActive === false)){
+      this.botIsNotReady = true;
+      this.checkedOrNot = false; 
+      this.setLocalstorage('volume');
     }
-
-  startPPPBTCbuy(){
-    var autoObjBTCbuy = {
-      pair: this.pppbtcbuy.value.pppbtcbuypair,
-      minQuantity: this.pppbtcbuy.value.pppbtcbuyminquantity,
-      maxQuantity: this.pppbtcbuy.value.pppbtcbuymaxquantity,
-      minRange: this.pppbtcbuy.value.pppbtcbuyminRange,
-      maxRange: this.pppbtcbuy.value.pppbtcbuymaxRange,
-      side: this.pppbtcbuy.value.pppbtcbuyside,
-      noOfTrades: this.pppbtcbuy.value.pppbtcbuynoOfTrades,
+    else if(stopBotPair == "PPP/BTC" && obj.side === 'volume' && (this.isETHVolumActive === undefined || this.isETHVolumActive === false )){
+      this.botIsNotReady = true;
+      this.checkedOrNot = false;
+      this.setLocalstorage('volume');
     }
-   this._router.startbotAuto(autoObjBTCbuy)
-      .subscribe((res) => {
-          this.message = res["message"];
-          this.alertclass = "alert-success";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        },
-        err => {
-          this.message = err.error["message"];
-          this.alertclass = "alert-danger";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-      });
-      this.pppbtcbuy.reset();
+    else if(stopBotPair == "PPP/ETH" && obj.side === 'price'&& (this.isBTCPriceActive === undefined || this.isBTCPriceActive === false )){
+      this.botIsNotReady = true;
+      this.checkedOrNot = true;
+      this.setLocalstorage('price');
     }
-
-  startPPPBTCsell(){
-    var autoObjBTCsell = {
-      pair: this.pppbtcsell.value.pppbtcsellpair,
-      minQuantity: this.pppbtcsell.value.pppbtcsellminquantity,
-      maxQuantity: this.pppbtcsell.value.pppbtcsellmaxquantity,
-      minRange: this.pppbtcsell.value.pppbtcsellminRange,
-      maxRange: this.pppbtcsell.value.pppbtcsellmaxRange,
-      side: this.pppbtcsell.value.pppbtcsellside,
-      noOfTrades: this.pppbtcsell.value.pppbtcsellnoOfTrades,
+    else if(stopBotPair == "PPP/BTC" && obj.side === 'price' && (this.isETHPriceActive === undefined || this.isETHPriceActive === false)){
+      this.botIsNotReady = true;
+      this.checkedOrNot = true;
+      this.setLocalstorage('price');
     }
-    this._router.startbotAuto(autoObjBTCsell)
-      .subscribe((res) => {
-          this.message = res["message"];
-          this.alertclass = "alert-success";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-        },
-        err => {
-          this.message = err.error["message"];
-          this.alertclass = "alert-danger";
-          this.displaystyle = {
-            "display":"block"
-          };
-          window.setTimeout(()=>{
-            this.displaystyle = {
-              "display":"none"
-            };
-          },10000);
-      });
-      this.pppbtcsell.reset();
+    let stopBotSide = obj.side; // volum 
+    console.log('stopBotSide',stopBotSide);
+    // check any volume bot is running
+    // check status of both bots 
+    let stats = this.checkLocalstorage();
+    console.log('stats',stats);
+    // stats.volume = false;
+    // this.setLocalstorage('volume');
+    stats = this.checkLocalstorage();
+    // if volum then check for also for    this.isETHVolumActive, this.isBTCVolumActive,
+    // if price then check for also for    this.isETHPriceActive, this.isBTCPriceActive
+    console.log('this.isETHVolumActive',this.isETHVolumActive);
+    console.log('this.isBTCVolumActive',this.isBTCVolumActive);
+    console.log('this.isETHPriceActive',this.isETHPriceActive);
+    console.log('this.isBTCPriceActive',this.isBTCPriceActive);
+    if(obj.side === 'volume' ){
+      this.isETHVolumActive
     }
-
-  StopBot(current_pair){
-    this._router.Stopbot(current_pair)
-    .subscribe((res) => {
+    console.log('stats',stats);
+    // if(stats.price == 'false' && stats.volume == 'false'){
+      // this.botIsNotReady = true;
+    //}
+    
+    console.log('---------checkLocalstorage---------',stats);
+    console.log('pair',obj.pair);
+    this._router.Stopbot({
+      "pair": obj.pair,
+    //  "pair" : "PPP/ETH",
+      "side" : obj.side
+    })
+    .subscribe(
+      res => {
         this.stopmessage = res["message"];
         this.alertstopclass = "alert-success";
-        this.displaystopstyle = {
-          "display":"block"
-        };
-        window.setTimeout(()=>{
-          this.displaystopstyle = {
-            "display":"none"
-          };
-        },10000);
-    },
-    err=>{
+        // this.displaystopstyle = {
+        //   "display":"block"
+        // };
+        // window.setTimeout(()=>{
+        //   this.displaystopstyle = {
+        //     "display":"none"
+        //   };
+        // },10000);
+      },
+      err=>{
         this.stopmessage = err["message"] ;
         this.alertstopclass = "alert-danger";
-        this.displaystopstyle = {
-          "display":"block"
-        };
-        window.setTimeout(()=>{
-          this.displaystopstyle = {
-            "display":"none"
-          };
-        },10000);
-    });
-  };
-};
+        // this.displaystopstyle = {
+        //   "display":"block"
+        // };
+        // window.setTimeout(()=>{
+        //   this.displaystopstyle = {
+        //     "display":"none"
+        //   };
+        // },10000);
+      }
+    );
+  }
+ 
+  // getorder_id(){
+  //   this._router.getOrderStatus(this.OrderStatus.value)
+  //   .subscribe(
+  //   res=>{
+  //     if(res["data"].message){
+  //       this.orderstatusmsg = res["data"].message
+  //     }
+  //     else{
+  //       this.orderstatusmsg = "Order: " + res["data"].id + " is " + res["data"].status;
+  //     }
+  //       this.orderstatusclass = "alert-success";
+  //       this.orderstatus = {
+  //         "display":"block"
+  //       };
+  //       window.setTimeout(()=>{
+  //         this.orderstatus = {
+  //           "display":"none"
+  //         };
+  //       },10000);
+  //   },
+  //   err => {
+  //     console.log(err,"error");
+      
+  //     this.orderstatusmsg = err["data"] ;
+  //     this.orderstatusclass = "alert-danger";
+  //     this.orderstatus = {
+  //       "display":"block"
+  //     };
+  //     window.setTimeout(()=>{
+  //       this.orderstatus = {
+  //         "display":"none"
+  //       };
+  //     },10000);
+  //   })
+  //   this.OrderStatus.reset()
+  // }
+  checkLocalstorage(){
+    let getVolume = JSON.parse(localStorage.getItem("volume"));
+    let getPrice = localStorage.getItem("price");
+    let botstatus = {"volume":getVolume,"price":getPrice}
+    console.log('-:getBot:-',botstatus);
+    return botstatus; 
+  }
+  setLocalstorage(bot){
+    // botStatus = [{runningBot:[isETHVolumActive,isBTCVolumActive]},{checkboxValue:true}]
+    // volume:true|false,price:true|false
+    if(bot === "volume"){
+      localStorage.setItem("volume", JSON.stringify(true));
+      localStorage.setItem("price", JSON.stringify(false));
+    }else if(bot === "price"){
+      localStorage.setItem("volume", JSON.stringify(false));
+      localStorage.setItem("price", JSON.stringify(true));
+    }
+  }
+}

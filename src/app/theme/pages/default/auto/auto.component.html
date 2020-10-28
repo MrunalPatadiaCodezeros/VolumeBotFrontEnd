@@ -1,232 +1,269 @@
-			     <!-- BEGIN: Subheader -->
-				<div class="m-subheader" appunwraptag="">
-				<div class="d-flex align-items-center">
-					<div class="mr-auto">
-							<h3 class="m-subheader__title">AutoComponent</h3>
-							<h3>Toggle Switch</h3>
-						<label class="switch">
-							<input type="checkbox">
-							<div class="slider"></div>
-						</label>
-					</div>
-				</div>
-				</div>
-				<!-- END: Subheader -->
-				<!--New Thing Start-->
-				<div class="m-5">
-					<span class="h2">Auto</span>
-					<div [ngStyle]="displaystopstyle" [ngClass]="alertstopclass" class="mt-3 alert-right-side alert alert-lightblue text-light alert-dismissible col-2" role="alert">
-						{{stopmessage}}
-					</div>
-				</div>
-				<!-- BEGIN: Subheader -->
-				<div class="m-subheader" appunwraptag="">
-					<div class="d-flex align-items-center pl-3">
-						<div class="mr-auto">
-							<!-- PPP/ETH Buy -->
-							<h5 class="mb-4">PPP/ETH Buy</h5>
-							<form class="form-row" [formGroup]="pppethbuy" (ngSubmit)="startPPPETHbuy()">
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Minimum Volume</label>
-									<input type="text" class="form-control"  formControlName="pppethbuyminquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppethbuyminquantity.invalid && (pppethbuyminquantity.dirty || pppethbuyminquantity.touched)">
-										<div *ngIf="pppethbuyminquantity.errors.required">Minimum Quantity is required</div>
-										<div *ngIf="pppethbuyminquantity.errors.pattern">Minimum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Maximum Volume</label>
-									<input type="text" class="form-control"  formControlName="pppethbuymaxquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppethbuymaxquantity.invalid && (pppethbuymaxquantity.dirty || pppethbuymaxquantity.touched)">
-										<div *ngIf="pppethbuymaxquantity.errors.required">Maximum Quantity is required</div>
-										<div *ngIf="pppethbuymaxquantity.errors.pattern">Maximum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputminRange">Time</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppethbuyminRange" placeholder="0.001">
-									<div class="text-danger" *ngIf="pppethbuyminRange.invalid && (pppethbuyminRange.dirty || pppethbuyminRange.touched)">
-										<div *ngIf="pppethbuyminRange.errors.required">Minimum Range is required</div>
-										<div *ngIf="pppethbuyminRange.errors.pattern">Minimum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputmaxRange">Price</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppethbuymaxRange" placeholder="0.005">
-									<div class="text-danger" *ngIf="pppethbuymaxRange.invalid && (pppethbuymaxRange.dirty || pppethbuymaxRange.touched)">
-										<div *ngIf="pppethbuymaxRange.errors.required">Maximum Range is required</div>
-										<div *ngIf="pppethbuymaxRange.errors.pattern">Maximum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputTrade">No. of Trade</label>
-									<input type="text" class="form-control" formControlName="pppethbuynoOfTrades" placeholder="10">
-									<div class="text-danger" *ngIf="pppethbuynoOfTrades.invalid && (pppethbuynoOfTrades.dirty || pppethbuynoOfTrades.touched)">
-										<div *ngIf="pppethbuynoOfTrades.errors.required">No. of Trade is required</div>
-									</div>
-								</div>
-								
-								<div class="form-group mt-2rem col-md-3">
-									<button [disabled]="pppethbuy.invalid" type="submit" *ngIf="!isETHbuyactive" class="btn btn-darkblue mr-2 text-white">Place Order</button>
-									<button disabled *ngIf="isETHbuyactive" class="btn btn-info mr-2 text-white">PPP/ETH Buy Active</button>					
-									<button type="button" class="btn btn-danger ml-2" *ngIf="isETHbuyactive" (click)="StopBot({pair:'PPP/ETH',side:'buy'})">Stop Bot</button>
-								</div> 
-
-							</form>
-							
-							<h5 class="mb-4">PPP/ETH Sell</h5>
-							<form class="form-row" [formGroup]="pppethsell" (ngSubmit)="startPPPETHsell()">
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Minimum Quantity</label>
-									<input type="text" class="form-control"  formControlName="pppethsellminquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppethsellminquantity.invalid && (pppethsellminquantity.dirty || pppethsellminquantity.touched)">
-										<div *ngIf="pppethsellminquantity.errors.required">Minimum Quantity is required</div>
-										<div *ngIf="pppethsellminquantity.errors.pattern">Minimum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Maximum Quantity</label>
-									<input type="text" class="form-control"  formControlName="pppethsellmaxquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppethsellmaxquantity.invalid && (pppethsellmaxquantity.dirty || pppethsellmaxquantity.touched)">
-										<div *ngIf="pppethsellmaxquantity.errors.required">Maximum Quantity is required</div>
-										<div *ngIf="pppethsellmaxquantity.errors.pattern">Maximum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputminRange">Minimum Range</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppethsellminRange" placeholder="0.001">
-									<div class="text-danger" *ngIf="pppethsellminRange.invalid && (pppethsellminRange.dirty || pppethsellminRange.touched)">
-										<div *ngIf="pppethsellminRange.errors.required">Minimum Range is required</div>
-										<div *ngIf="pppethsellminRange.errors.pattern">Minimum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputmaxRange">Maximum Range</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppethsellmaxRange" placeholder="0.005">
-									<div class="text-danger" *ngIf="pppethsellmaxRange.invalid && (pppethsellmaxRange.dirty || pppethsellmaxRange.touched)">
-										<div *ngIf="pppethsellmaxRange.errors.required">Maximum Range is required</div>
-										<div *ngIf="pppethsellmaxRange.errors.pattern">Maximum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputTrade">No. of Trade</label>
-									<input type="text" class="form-control" formControlName="pppethsellnoOfTrades" placeholder="10">
-									<div class="text-danger" *ngIf="pppethsellnoOfTrades.invalid && (pppethsellnoOfTrades.dirty || pppethsellnoOfTrades.touched)">
-										<div *ngIf="pppethsellnoOfTrades.errors.required">No. of Trade is required</div>
-									</div>
-								</div>
-								<div class="form-group mt-2rem col-md-3">
-									<button [disabled]="pppethsell.invalid" type="submit" *ngIf="!isETHsellactive" class="btn btn-darkblue mr-2 text-white">Place Order</button>
-									<button disabled *ngIf="isETHsellactive" class="btn btn-info mr-2 text-white">PPP/ETH Buy Active</button>					
-									<button type="button" class="btn btn-danger" *ngIf="isETHsellactive" (click)="StopBot({pair:'PPP/ETH',side:'sell'})">Stop Bot</button>
-								</div>  
-							</form>
-							
-							<h5 class="mb-4">PPP/BTC Buy</h5>
-							<form class="form-row" [formGroup]="pppbtcbuy" (ngSubmit)="startPPPBTCbuy()">
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Minimum Quantity</label>
-									<input type="text" class="form-control"  formControlName="pppbtcbuyminquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppbtcbuyminquantity.invalid && (pppbtcbuyminquantity.dirty || pppbtcbuyminquantity.touched)">
-										<div *ngIf="pppbtcbuyminquantity.errors.required">Minimum Quantity is required</div>
-										<div *ngIf="pppbtcbuyminquantity.errors.pattern">Minimum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Maximum Quantity</label>
-									<input type="text" class="form-control"  formControlName="pppbtcbuymaxquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppbtcbuymaxquantity.invalid && (pppbtcbuymaxquantity.dirty || pppbtcbuymaxquantity.touched)">
-										<div *ngIf="pppbtcbuymaxquantity.errors.required">Maximum Quantity is required</div>
-										<div *ngIf="pppbtcbuymaxquantity.errors.pattern">Maximum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputminRange">Minimum Range</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppbtcbuyminRange" placeholder="0.001">
-									<div class="text-danger" *ngIf="pppbtcbuyminRange.invalid && (pppbtcbuyminRange.dirty || pppbtcbuyminRange.touched)">
-										<div *ngIf="pppbtcbuyminRange.errors.required">Minimum Range is required</div>
-										<div *ngIf="pppbtcbuyminRange.errors.pattern">Minimum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputmaxRange">Maximum Range</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppbtcbuymaxRange" placeholder="0.005">
-									<div class="text-danger" *ngIf="pppbtcbuymaxRange.invalid && (pppbtcbuymaxRange.dirty || pppbtcbuymaxRange.touched)">
-										<div *ngIf="pppbtcbuymaxRange.errors.required">Maximum Range is required</div>
-										<div *ngIf="pppbtcbuymaxRange.errors.pattern">Maximum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputTrade">No. of Trade</label>
-									<input type="text" class="form-control" formControlName="pppbtcbuynoOfTrades" placeholder="10">
-									<div class="text-danger" *ngIf="pppbtcbuynoOfTrades.invalid && (pppbtcbuynoOfTrades.dirty || pppbtcbuynoOfTrades.touched)">
-										<div *ngIf="pppbtcbuynoOfTrades.errors.required">No. of Trade is required</div>
-									</div>
-								</div>
-								<div class="form-group mt-2rem col-md-3">
-									<button [disabled]="pppbtcbuy.invalid" type="submit" *ngIf="!isBTCbuyactive" class="btn btn-darkblue mr-2 text-white">Place Order</button>
-									<button disabled *ngIf="isBTCbuyactive" class="btn btn-info mr-2 text-white">PPP/ETH Buy Active</button>					
-									<button type="button" class="btn btn-danger" *ngIf="isBTCbuyactive" (click)="StopBot({pair:'PPP/BTC',side:'buy'})">Stop Bot</button>
-								</div>  
-							</form>
-						
-							<h5 class="mb-4">PPP/BTC Sell</h5>
-							<form class="form-row" [formGroup]="pppbtcsell" (ngSubmit)="startPPPBTCsell()">
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Minimum Quantity</label>
-									<input type="text" class="form-control"  formControlName="pppbtcsellminquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppbtcsellminquantity.invalid && (pppbtcsellminquantity.dirty || pppbtcsellminquantity.touched)">
-										<div *ngIf="pppbtcsellminquantity.errors.required">Minimum Quantity is required</div>
-										<div *ngIf="pppbtcsellminquantity.errors.pattern">Minimum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputQuantity">Maximum Quantity</label>
-									<input type="text" class="form-control"  formControlName="pppbtcsellmaxquantity" placeholder="1">
-									<div class="text-danger" *ngIf="pppbtcsellmaxquantity.invalid && (pppbtcsellmaxquantity.dirty || pppbtcsellmaxquantity.touched)">
-										<div *ngIf="pppbtcsellmaxquantity.errors.required">Maximum Quantity is required</div>
-										<div *ngIf="pppbtcsellmaxquantity.errors.pattern">Maximum Quantity should contain numbers and ".".</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputminRange">Minimum Range</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppbtcsellminRange" placeholder="0.001">
-									<div class="text-danger" *ngIf="pppbtcsellminRange.invalid && (pppbtcsellminRange.dirty || pppbtcsellminRange.touched)">
-										<div *ngIf="pppbtcsellminRange.errors.required">Minimum Range is required</div>
-										<div *ngIf="pppbtcsellminRange.errors.pattern">Minimum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputmaxRange">Maximum Range</label>
-									<input type="number" min="0" max="100" step="0.001" class="form-control" formControlName="pppbtcsellmaxRange" placeholder="0.005">
-									<div class="text-danger" *ngIf="pppbtcsellmaxRange.invalid && (pppbtcsellmaxRange.dirty || pppbtcsellmaxRange.touched)">
-										<div *ngIf="pppbtcsellmaxRange.errors.required">Maximum Range is required</div>
-										<div *ngIf="pppbtcsellmaxRange.errors.pattern">Maximum Range should contain numbers.</div>
-									</div>
-								</div>
-								<div class="form-group col-md-2">
-									<label for="inputTrade">No. of Trade</label>
-									<input type="text" class="form-control" formControlName="pppbtcsellnoOfTrades" placeholder="10">
-									<div class="text-danger" *ngIf="pppbtcsellnoOfTrades.invalid && (pppbtcsellnoOfTrades.dirty || pppbtcsellnoOfTrades.touched)">
-										<div *ngIf="pppbtcsellnoOfTrades.errors.required">No. of Trade is required</div>
-									</div>
-								</div>
-								<div class="form-group mt-2rem col-md-3">
-									<button [disabled]="pppbtcsell.invalid" type="submit" *ngIf="!isBTCsellactive" class="btn btn-darkblue mr-2 text-white">Place Order</button>
-									<button disabled *ngIf="isBTCsellactive" class="btn btn-info mr-2 text-white">PPP/ETH Buy Active</button>					
-									<button type="button" class="btn btn-danger" *ngIf="isBTCsellactive" (click)="StopBot({pair:'PPP/BTC',side:'sell'})">Stop Bot</button>
-								</div>
-							</form>
-							<!-- <div class="alert alert-lightblue text-light alert-dismissible col-8" role="alert">
-								<span *ngFor="let item of dataerror">{{item.errors.product_id}}</span>
-							</div> -->
-						</div>
-					</div>
-				
-					<div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-6" role="alert">
-						{{message}}
-					</div>
-				</div> <!-- END: Subheader -->
-				
-				<app-joblist></app-joblist> -->
-				<!--New THing End-->
+<div class="m-subheader" appunwraptag="" *ngIf="botIsNotReady">
+    <div class="d-flex align-items-center">
+        <div class="mr-auto">
+            <h3> Volume or Price Toggle Switch</h3>
+            <label class="switch" >
+                <input type="checkbox" [checked]="checkedOrNot" (change)="changeVolumeAndPriceGenrator($event)" #checkbox  [checked]="checkModel" >
+                <div class="slider"></div>
+            </label>
+        </div>
+    </div>
+</div>
+<!-- Changes --> 
+<!-- formGroup :- manualOrder :  -->
+<!-- (ngSubmit)="StartBotManual() -->
+<!-- CHANGES IN textbox minimumVolume and maximunVolume both -->
+<!-- id="inputQuantity" to minimumVolume || maximunVolume at 7 lable(for) input(id) -->
+<!-- formControlName="quantity" to minimumVolumeQuantity with *ngIf also -->
+<!-- id="inputPrice" to inputTime formControlName="price" to Time -->
+<!-- Change place Order buTTON *ngIf condition-----------------cHECK-isETHbuyactive--------------------------------|pENDING| -->
+<!-- Change place Order buTTON click (click)="StopBot({pair:'PPP/ETH',side:'buy'})"--------------------------------|pENDING| -->
+ 
+<!-- BEGIN: Volume Genrator for PPP/ETH -->
+<div class="m-subheader" appunwraptag="" id="volumeGenerator" [ngClass]="classVolumeForm">
+    <div class="d-flex align-items-center pl-3">
+        <div class="mr-auto">
+            <h5 class="mb-4">PPP/ETH </h5>
+            <!--[formGroup]="manualOrder"-->
+            <form class="form-row" [formGroup]="autoPPPETHVolumeGenratOrder" (ngSubmit)="StartPPPETHVolumeBot({pair:'PPP/ETH'})"> <!--change Eequire As Automatic bot is there--> 
+                <!-- <div class="form-group col-md-3">
+                    <label for="inputState">Pair</label>
+                    <select id="inputState" class="form-control" formControlName="pair" #selectedPairForVolumeBot>
+                        <option selected>PPP/ETH</option>
+                        <option>PPP/BTC</option>
+                    </select>
+                    <div class="text-danger" *ngIf="pair.invalid && (pair.dirty || pair.touched)">
+                        <div *ngIf="pair.errors.required">Pair is required</div>
+                    </div>
+                </div> -->
+                <div class="form-group col-md-3">
+                    <label for="minimumVolume">Minimum Volume</label>
+                    <input type="text" class="form-control" id="minimumVolume" formControlName="PPPETHminimumVolumeQuantity" placeholder="0.001">
+                    <div class="text-danger" *ngIf="PPPETHminimumVolumeQuantity.invalid && (PPPETHminimumVolumeQuantity.dirty || PPPETHminimumVolumeQuantity.touched)">
+                        <div *ngIf="PPPETHminimumVolumeQuantity.errors.required">Minimum Volume is required</div>
+                        <div *ngIf="PPPETHminimumVolumeQuantity.errors.pattern">Minimum Volume should contain numbers and ".".></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="maximumVolume">Maximum Volume</label>
+                    <input type="text" class="form-control" id="maximumVolume" formControlName="PPPETHmaximumVolumeQuantity" placeholder="0.001">
+                    <div class="text-danger" *ngIf="PPPETHmaximumVolumeQuantity.invalid && (PPPETHmaximumVolumeQuantity.dirty || PPPETHmaximumVolumeQuantity.touched)">
+                        <div *ngIf="PPPETHmaximumVolumeQuantity.errors.required">Maximun Volume is required</div>
+                        <div *ngIf="PPPETHmaximumVolumeQuantity.errors.pattern">Maximun Volume should contain numbers and ".".></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="inputTime">Time</label>
+                    <input type="text" class="form-control" id="inputTime" formControlName="PPPETHtime" placeholder="1" min=1 max=24 >
+                    <div class="text-danger" *ngIf="PPPETHtime.invalid && (PPPETHtime.dirty || PPPETHtime.touched)">
+                        <div *ngIf="PPPETHtime.errors.required">Time is required</div>
+                        <div *ngIf="PPPETHtime.errors.pattern">Time should contain numbers.</div>
+                    </div>
+                </div>
+                <div class="form-group mt-2rem col-md-3">
+                    <!-- Check [disabled]="pppethbuy.invalid"-->
+                    <!-- Make [disabled]="autoVolumeGenratOrder.invalid" -->
+                    <!-- Check *ngIf="!isETHbuyactive" -->
+                    <button type="submit" [disabled]="autoPPPETHVolumeGenratOrder.invalid" class="btn btn-darkblue mr-2 text-white">Place Order</button>                    
+                    <!-- Check *ngIf="isETHbuyactive" -->
+                    <button type="button"  class="btn btn-danger ml-2" style="position: absolute;" (click)="StopBot({pair:'PPP/ETH',side:'volume'})">Stop Bot</button>
+                </div> 
+            </form>
+            <!-- <div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-12" role="alert">
+                {{message}}
+            </div>
+            <div [ngStyle]="displayvalidmsg" [ngClass]="alertclass" class="alert alert-warning text-light alert-dismissible col-12" role="alert">
+                <strong>!You dont have enough balance to place this order</strong>
+            </div>
+            <div [ngStyle]="orderstatus" [ngClass]="orderstatusclass" class="mt-3 alert alert-lightblue text-light alert-dismissible col-5" role="alert">
+                {{orderstatusmsg}}
+            </div> -->
+        </div>
+    </div>
+</div> 
+<!-- END: Volume Genrator for PPP/ETH -->
+ 
+<!-- BEGIN: Volume Genrator for PPP/BTC -->
+<div class="m-subheader" appunwraptag="" id="volumeGenerator" [ngClass]="classVolumeForm">
+    <div class="d-flex align-items-center pl-3">
+        <div class="mr-auto">
+            <h5 class="mb-4">PPP/BTC </h5>
+            <!--[formGroup]="manualOrder"-->
+            <form class="form-row" [formGroup]="autoPPPBTCVolumeGenratOrder" (ngSubmit)="StartPPPBTCVolumeBot({pair:'PPP/BTC'})"> <!--change Eequire As Automatic bot is there--> 
+                <!-- <div class="form-group col-md-3">
+                    <label for="inputState">Pair</label>
+                    <select id="inputState" class="form-control" formControlName="pair" #selectedPairForVolumeBot>
+                        <option selected>PPP/ETH</option>
+                        <option>PPP/BTC</option>
+                    </select>
+                    <div class="text-danger" *ngIf="pair.invalid && (pair.dirty || pair.touched)">
+                        <div *ngIf="pair.errors.required">Pair is required</div>
+                    </div>
+                </div> -->
+                <div class="form-group col-md-3">
+                    <label for="minimumVolume">Minimum Volume</label>
+                    <input type="text" class="form-control" id="minimumVolume" formControlName="PPPBTCminimumVolumeQuantity" placeholder="0.001">
+                    <div class="text-danger" *ngIf="PPPBTCminimumVolumeQuantity.invalid && (PPPBTCminimumVolumeQuantity.dirty || PPPBTCminimumVolumeQuantity.touched)">
+                        <div *ngIf="PPPBTCminimumVolumeQuantity.errors.required">Minimum Volume is required</div>
+                        <div *ngIf="PPPBTCminimumVolumeQuantity.errors.pattern">Minimum Volume should contain numbers and ".".></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="maximumVolume">Maximum Volume</label>
+                    <input type="text" class="form-control" id="maximumVolume" formControlName="PPPBTCmaximumVolumeQuantity" placeholder="0.001">
+                    <div class="text-danger" *ngIf="PPPBTCmaximumVolumeQuantity.invalid && (PPPBTCmaximumVolumeQuantity.dirty || PPPBTCmaximumVolumeQuantity.touched)">
+                        <div *ngIf="PPPBTCmaximumVolumeQuantity.errors.required">Maximun Volume is required</div>
+                        <div *ngIf="PPPBTCmaximumVolumeQuantity.errors.pattern">Maximun Volume should contain numbers and ".".></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="inputTime">Time</label>
+                    <input type="text" class="form-control" id="inputTime" formControlName="PPPBTCtime" placeholder="1" min=1 max=24 >
+                    <div class="text-danger" *ngIf="PPPBTCtime.invalid && (PPPBTCtime.dirty || PPPBTCtime.touched)">
+                        <div *ngIf="PPPBTCtime.errors.required">Time is required</div>
+                        <div *ngIf="PPPBTCtime.errors.pattern">Time should contain numbers.</div>
+                    </div>
+                </div>
+                <div class="form-group mt-2rem col-md-3">
+                    <!-- Check [disabled]="pppethbuy.invalid"-->
+                    <!-- Make [disabled]="autoVolumeGenratOrder.invalid" -->
+                    <!-- Check *ngIf="!isETHbuyactive" -->
+                    <button type="submit" [disabled]="autoPPPBTCVolumeGenratOrder.invalid" class="btn btn-darkblue mr-2 text-white">Place Order</button>                    
+                    <!-- Check *ngIf="isETHbuyactive" -->
+                    <button type="button" *ngIf="isBTCVolumActive" class="btn btn-danger ml-2" style="position: absolute;" (click)="StopBot({pair:'PPP/BTC',side:'volume'})">Stop Bot</button>
+                </div> 
+            </form>
+            <!-- <div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-12" role="alert">
+                {{message}}
+            </div>
+            <div [ngStyle]="displayvalidmsg" [ngClass]="alertclass" class="alert alert-warning text-light alert-dismissible col-12" role="alert">
+                <strong>!You dont have enough balance to place this order</strong>
+            </div>
+            <div [ngStyle]="orderstatus" [ngClass]="orderstatusclass" class="mt-3 alert alert-lightblue text-light alert-dismissible col-5" role="alert">
+                {{orderstatusmsg}}
+            </div> -->
+        </div>
+    </div>
+</div> 
+<!-- END: Volume Genrator for PPP/BTC -->
+ 
+<!-- Changes --> 
+<!-- formGroup :- manualOrder :  -->
+<!-- (ngSubmit)="StartBotManual() -->
+<!-- id="inputQuantity" to minimumVolume || maximunVolume at 7 lable(for) input(id) -->
+<!-- formControlName="quantity" to price with *ngIf also -->
+<!-- id="inputPrice" to inputTime formControlName="price" to Time -->
+<!-- Change place Order buTTON *ngIf condition-----------------cHECK-isETHbuyactive--------------------------------|pENDING| -->
+<!-- Change place Order buTTON click (click)="StopBot({pair:'PPP/ETH',side:'buy'})"--------------------------------|pENDING| -->
+ 
+<!-- BEGIN: Price Achiver for PPP/ETH -->
+<div class="m-subheader" appunwraptag="" id="priceGenerator" [ngClass]="classPriceForm">
+    <div class="d-flex align-items-center pl-3">
+        <div class="mr-auto">
+            <h5 class="mb-4">PPP/ETH </h5>
+            <form class="form-row" [formGroup]="autoPPPETHPriceGenratOrder" (ngSubmit)="StartPPPETHPriceBot({pair:'PPP/ETH'})">
+                <!-- <div class="form-group col-md-3">
+                    <label for="inputState">Pair</label>
+                    <select id="inputState" class="form-control" formControlName="pair" #selectedPairForPriceBot>
+                        <option selected>PPP/ETH</option>
+                        <option>PPP/BTC</option>
+                    </select>
+                    <div class="text-danger" *ngIf="pair.invalid && (pair.dirty || pair.touched)">
+                        <div *ngIf="pair.errors.required">Pair is required</div>
+                    </div>
+                </div> -->
+                <div class="form-group col-md-3">
+                    <label for="price">Price To Achive</label>
+                    <input type="text" class="form-control" id="price" formControlName="PPPETHprice" placeholder="0.001">
+                    <!-- <div class="text-danger" *ngIf="PPPETHprice.invalid && (PPPETHprice.dirty || PPPETHprice.touched)">
+                        <div *ngIf="PPPETHprice.errors.required">price is required</div>
+                        <div *ngIf="PPPETHprice.errors.pattern">price should contain numbers and ".".></div>
+                    </div> -->
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="inputTime">Time</label>
+                    <input type="text" class="form-control" id="inputTime" formControlName="PPPETHtimeforprice" placeholder="1" min=1 max=24 >
+                    <div class="text-danger" *ngIf="PPPETHtimeforprice.invalid && (PPPETHtimeforprice.dirty || PPPETHtimeforprice.touched)">
+                        <div *ngIf="PPPETHtimeforprice.errors.required">Time is required</div>
+                        <div *ngIf="PPPETHtimeforprice.errors.pattern">Time should contain numbers.</div>
+                    </div>
+                </div>
+                <!-- <div class="form-group mt-2rem col-md-3">
+                    <button [disabled]="manualOrder.invalid" type="submit" class="btn btn-darkblue text-white">Place Order</button>
+                </div> -->
+                <div class="form-group mt-2rem col-md-3">
+                    <!--check [disabled]="pppethbuy.invalid"-->
+                    <!--(click)="StopBot({pair:'PPP/ETH',side:'buy'})"-->
+                    <button type="submit" [disabled]="autoPPPETHPriceGenratOrder.invalid" class="btn btn-darkblue mr-2 text-white">Place Order</button>                 
+                    <button type="button" *ngIf="isETHPriceActive" style="position: absolute;" class="btn btn-danger ml-2" (click)="StopBot({pair:'PPP/ETH',side:'price'})" >Stop Bot</button>
+                </div> 
+            </form>
+            <!-- <div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-12" role="alert">
+                {{message}}
+            </div>
+            <div [ngStyle]="displayvalidmsg" [ngClass]="alertclass" class="alert alert-warning text-light alert-dismissible col-12" role="alert">
+                <strong>!You dont have enough balance to place this order</strong>
+            </div>
+            <div [ngStyle]="orderstatus" [ngClass]="orderstatusclass" class="mt-3 alert alert-lightblue text-light alert-dismissible col-5" role="alert">
+                {{orderstatusmsg}}
+            </div> -->
+        </div>
+    </div>
+</div> 
+<!-- END: Subheader for PPP/ETH-->
+ 
+<!-- BEGIN: Price Achiver for PPP/BTC -->
+<div class="m-subheader" appunwraptag="" id="priceGenerator" [ngClass]="classPriceForm">
+    <div class="d-flex align-items-center pl-3">
+        <div class="mr-auto">
+            <h5 class="mb-4">PPP/BTC </h5>
+            <form class="form-row" [formGroup]="autoPPPBTCPriceGenratOrder" (ngSubmit)="StartPPPBTCPriceBot({pair:'PPP/BTC'})">
+                <!-- <div class="form-group col-md-3">
+                    <label for="inputState">Pair</label>
+                    <select id="inputState" class="form-control" formControlName="pair" #selectedPairForPriceBot>
+                        <option selected>PPP/ETH</option>
+                        <option>PPP/BTC</option>
+                    </select>
+                    <div class="text-danger" *ngIf="pair.invalid && (pair.dirty || pair.touched)">
+                        <div *ngIf="pair.errors.required">Pair is required</div>
+                    </div>
+                </div> -->
+                <div class="form-group col-md-3">
+                    <label for="price">Price To Achive</label>
+                    <input type="text" class="form-control" id="price" formControlName="PPPBTCprice" placeholder="0.001">
+                    <!-- <div class="text-danger" *ngIf="PPPBTCprice.invalid && (PPPBTCprice.dirty || PPPBTCprice.touched)">
+                        <div *ngIf="PPPBTCprice.errors.required">price is required</div>
+                        <div *ngIf="PPPBTCprice.errors.pattern">price should contain numbers and ".".></div>
+                    </div> -->
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="inputTime">Time</label>
+                    <input type="text" class="form-control" id="inputTime" formControlName="PPPBTCtimeforprice" placeholder="1" min=1 max=24 >
+                    <div class="text-danger" *ngIf="PPPBTCtimeforprice.invalid && (PPPBTCtimeforprice.dirty || PPPBTCtimeforprice.touched)">
+                        <div *ngIf="PPPBTCtimeforprice.errors.required">Time is required</div>
+                        <div *ngIf="PPPBTCtimeforprice.errors.pattern">Time should contain numbers.</div>
+                    </div>
+                </div>
+                <!-- <div class="form-group mt-2rem col-md-3">
+                    <button [disabled]="manualOrder.invalid" type="submit" class="btn btn-darkblue text-white">Place Order</button>
+                </div> -->
+                <div class="form-group mt-2rem col-md-3">
+                    <!--check [disabled]="pppethbuy.invalid"-->
+                    <!--(click)="StopBot({pair:'PPP/ETH',side:'buy'})  *ngIf="!isETHbuyactive""-->
+                    <button type="submit" [disabled]="autoPPPBTCPriceGenratOrder.invalid" class="btn btn-darkblue mr-2 text-white">Place Order</button>                 
+                    <button type="button" *ngIf="isBTCPriceActive" style="position: absolute;" class="btn btn-danger ml-2" (click)="StopBot({pair:'PPP/BTC',side:'price'})" >Stop Bot</button>
+                </div> 
+            </form>
+            <!-- <div [ngStyle]="displaystyle" [ngClass]="alertclass" class="alert alert-lightblue text-light alert-dismissible col-12" role="alert">
+                {{message}}
+            </div>
+            <div [ngStyle]="displayvalidmsg" [ngClass]="alertclass" class="alert alert-warning text-light alert-dismissible col-12" role="alert">
+                <strong>!You dont have enough balance to place this order</strong>
+            </div>
+            <div [ngStyle]="orderstatus" [ngClass]="orderstatusclass" class="mt-3 alert alert-lightblue text-light alert-dismissible col-5" role="alert">
+                {{orderstatusmsg}}
+            </div> -->
+        </div>
+    </div>
+</div> 
+<!-- END: Subheader for PPP/BTC-->
