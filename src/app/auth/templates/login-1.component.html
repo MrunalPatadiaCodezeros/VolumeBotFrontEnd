@@ -5,15 +5,9 @@
 
 				<div class="m-login__wrapper">
 
-					<div class="m-login__logo">
-						<a href="#">
-						<img src="./assets/logo.png" width="38%">  	
-						</a>
-					</div>
-
 					<div class="m-login__signin">
 						<div class="m-login__head">
-							<h3 class="m-login__title">Sign In To Crypto Bot</h3>
+							<h3 class="m-login__title">Sign In To Volume Bot</h3>
 					</div>
 
 						<form (ngSubmit)="f.form.valid && signin()" #f="ngForm" class="m-login__form m-form" action=""><ng-template #alertSignin></ng-template>
@@ -24,12 +18,6 @@
 								<input class="form-control m-input m-login__form-input--last" type="password" placeholder="Password" name="password" [(ngModel)]="model.password" #password="ngModel">
 							</div>
 							<div class="row m-login__form-sub">
-								<div class="col m--align-left">
-									<label class="m-checkbox m-checkbox--focus">
-									<input type="checkbox" name="remember" [(ngModel)]="model.remember" #remember="ngModel"> Remember me
-									<span></span>
-									</label>
-								</div>
 								<div class="col m--align-right">
 									<a href="javascript:;" id="m_login_forget_password" class="m-link">Forget Password ?</a>
 								</div>
@@ -97,9 +85,9 @@
 	</div>
 	<div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content m-grid-item--center" style="background-image: url(./assets/app/media/img//bg/bg-4.jpg)">
 		<div class="m-grid__item">
-			<h3 class="m-login__welcome">Crypto Bot</h3>
+			<h3 class="m-login__welcome">Volume Bot</h3>
 			<p class="m-login__msg">
-				Automated computer programs that<br> buy and sell cryptocurrencies at the correct time.
+				Automated computer programs that buy and sell<br> cryptocurrencies at the correct time and achieve the desired volume.
 			</p>
 		</div>
 	</div>

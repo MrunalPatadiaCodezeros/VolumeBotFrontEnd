@@ -14,7 +14,7 @@ export class UserService {
 	}
 
 	forgotPassword(email: string) {
-		return this.httpclient.post('http://68.183.94.224:4000/tradebot/api/v1/user/forgotPassword', ({user_email:email}));
+		return this.httpclient.post('http://localhost:3000/tradebot/api/v1/user/forgotPassword', ({user_email:email}));
 		// return this.httpclient.put('http://localhost:3000/users/forget-password', ({email}), this.jwt()).map((response) => response.json());
 	}
 

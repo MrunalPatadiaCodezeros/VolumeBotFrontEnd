@@ -66,9 +66,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
   
   // PPPETH Volume Genrat Order
   autoPPPETHVolumeGenratOrder = new FormGroup({
-  PPPETHminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
-  PPPETHmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
-  PPPETHtime: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
+  PPPETHminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
+  PPPETHmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
+  PPPETHtime: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')])
   });
   get PPPETHminimumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHminimumVolumeQuantity")};
   get PPPETHmaximumVolumeQuantity(){return this.autoPPPETHVolumeGenratOrder.get("PPPETHmaximumVolumeQuantity")};
@@ -76,9 +76,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
  
   // PPPBTC Volume Genrat Order
   autoPPPBTCVolumeGenratOrder = new FormGroup({
-  PPPBTCminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
-  PPPBTCmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
-  PPPBTCtime: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')])
+  PPPBTCminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
+  PPPBTCmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
+  PPPBTCtime: new FormControl("",[Validators.required,Validators.maxLength(2),Validators.pattern('[0-9]*')])
   });
   get PPPBTCminimumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCminimumVolumeQuantity")};
   get PPPBTCmaximumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCmaximumVolumeQuantity")};
@@ -86,16 +86,16 @@ export class AutoComponent implements OnInit, AfterViewInit {
  
   // PPPETH Price Genrat Order
   autoPPPETHPriceGenratOrder = new FormGroup({
-  PPPETHprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
-  PPPETHtimeforprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPETHprice: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
+  PPPETHtimeforprice: new FormControl("",[Validators.required,Validators.maxLength(2),Validators.pattern('[0-9]*')]),
   });
   get PPPETHprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHprice")};
   get PPPETHtimeforprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHtimeforprice")};
  
   // PPPBTC Price Genrat Order
   autoPPPBTCPriceGenratOrder = new FormGroup({
-  PPPBTCprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
-  PPPBTCtimeforprice: new FormControl("",[Validators.required,Validators.pattern('[0-9]*')]),
+  PPPBTCprice: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
+  PPPBTCtimeforprice: new FormControl("",[Validators.required,Validators.maxLength(2),Validators.pattern('[0-9]*')]),
   });
   get PPPBTCprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCprice")};
   get PPPBTCtimeforprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCtimeforprice")};

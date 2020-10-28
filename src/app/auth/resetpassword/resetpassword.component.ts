@@ -51,7 +51,7 @@ export class ResetpasswordComponent implements OnInit {
 	    current_password : this.resetpassword.value.temp_password,
 	    new_password: this.resetpassword.value.new_password
     }
-    this.http.post("http://68.183.94.224:4000/tradebot/api/v1/user/resetPassword",new_password)
+    this.http.post("http://localhost:3000/tradebot/api/v1/user/resetPassword",new_password)
     .subscribe(res =>{
       this.response = res["message"];
       this.isvalid = true
