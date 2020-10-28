@@ -2,6 +2,8 @@ import { Component, OnInit,ViewEncapsulation,AfterViewInit } from '@angular/core
 import { Helpers } from '../../../../helpers';
 import { ScriptLoaderService } from '../../../../_services/script-loader.service';
 import { RouterResponseService } from '../../../../_services/router-response.service';
+import { ToastrService } from "ngx-toastr";
+
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +16,7 @@ export class DashboardComponent implements OnInit, AfterViewInit{
   Accountbalance:any;
   alertsign:any;
   status:any;
-  constructor(private _script: ScriptLoaderService, private _router:RouterResponseService)  {}
+  constructor(private _script: ScriptLoaderService, private _router:RouterResponseService,private toaster: ToastrService)  {}
 
   ngOnInit() {
   }
@@ -61,19 +63,22 @@ export class DashboardComponent implements OnInit, AfterViewInit{
   BitcoinPrice(){
     this._router.getBitcoinPrice()
     .subscribe((res) => {
-      this.Bitcoin = res["data"]   
+      this.Bitcoin = res["data"]
+      this.toaster.success("Bitcoin price refreshed.")
     })
   }
   EthereumPrice(){
     this._router.getEthereumPrice()
     .subscribe((res) => {
       this.Ethereum = res["data"]
+      this.toaster.success("Ethereum price refreshed.")
     })
   }
   AccountBalance(){
     this._router.getAccountBalance()
     .subscribe((res) => {
       this.AccountBalance = res["data"]
+      this.toaster.success("Account Balance refreshed.")
     })
   }
   GetBotStatus(){

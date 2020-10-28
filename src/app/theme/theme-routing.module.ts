@@ -18,7 +18,7 @@ const routes: Routes = [
                 "loadChildren": "./pages/default/manual/manual.module#ManualModule"
             },
             {
-                "path": "auto",
+                "path": "volume-generator",
                 "loadChildren": "./pages/default/auto/auto.module#AutoModule"
             },
             {

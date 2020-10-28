@@ -23,12 +23,12 @@ export class RouterResponseService {
   }
 
   startbotManual(orderDetails){
-    return this.http.post(this.api_url + "user/startBotManual",orderDetails);
-  }
-
-  startbotAuto(orderDetails){
     return this.http.post(this.api_url + "user/startBotAutomatic",orderDetails);
   }
+
+  // startbotAuto(orderDetails){
+  //   return this.http.post(this.api_url + "user/startBotAutomatic",orderDetails);
+  // }
 
   Stopbot(botpair){
     return this.http.post(this.api_url + "user/stopBot",botpair);

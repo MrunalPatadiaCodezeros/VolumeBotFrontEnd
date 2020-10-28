@@ -10,6 +10,8 @@ import { AppComponent } from './app.component';
 import { ScriptLoaderService } from "./_services/script-loader.service";
 import { ThemeRoutingModule } from "./theme/theme-routing.module";
 import { AuthModule } from "./auth/auth.module";
+import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
@@ -24,6 +26,12 @@ import { AuthModule } from "./auth/auth.module";
     ThemeRoutingModule,
     AuthModule,
     HttpClientModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      enableHtml: true,
+    }),
   ],
   providers: [ScriptLoaderService],
   bootstrap: [AppComponent]

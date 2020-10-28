@@ -63,7 +63,7 @@ a:hover {
 .switch {
     position: relative;
     width: 60px;
-    height: 36px;
+    height: 34px;
   }
   
   .switch input {display:none;}

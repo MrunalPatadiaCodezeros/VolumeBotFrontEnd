@@ -4,7 +4,7 @@ import { FormControl,FormGroup,Validators } from "@angular/forms";
 import { Helpers } from '../../../../helpers';
 import { ScriptLoaderService } from '../../../../_services/script-loader.service';
 import { RouterResponseService } from '../../../../_services/router-response.service';
-import { first } from 'rxjs-compat/operator/first';
+import { ToastrService } from "ngx-toastr";
  
  
 @Component({
@@ -28,25 +28,9 @@ encapsulation: ViewEncapsulation.None,
  */
 export class AutoComponent implements OnInit, AfterViewInit {
   message:any;
-  alertclass;
-  alertstopclass;
   stopmessage:any;
   botIsNotReady:any;
   checkedOrNot:any;
-  // Common Variable by ngx-toastr
-  // displaystyle = {
-  //   'display':"none"
-  // };
-  // displaystopstyle = {
-  //   'display':"none"
-  // };
-  // displayvalidmsg = {
-  //   'display':"none"
-  // };
-  isETHbuyactive;
-  isETHsellactive;
-  isBTCbuyactive;
-  isBTCsellactive;
  
   isETHVolumActive;
   isETHPriceActive;
@@ -54,15 +38,10 @@ export class AutoComponent implements OnInit, AfterViewInit {
   isBTCPriceActive;
  
   filter:any;
-  orderstatusmsg:any;
-  orderstatusclass;
-  orderstatus = {
-    'display':"none"
-  }
   checkModel:any
   classVolumeForm = ""
   classPriceForm = "notDisplay"
-  constructor(private _script: ScriptLoaderService, private _router:RouterResponseService)  {}
+  constructor(private _script: ScriptLoaderService, private _router:RouterResponseService,private toaster: ToastrService)  {}
   
   // PPPETH Volume Genrat Order
   autoPPPETHVolumeGenratOrder = new FormGroup({
@@ -197,22 +176,17 @@ export class AutoComponent implements OnInit, AfterViewInit {
         currentPrice = parseFloat(res['data'][0].average_price);
         // 10 orders are place in one batch 
         minimumRequireBalance = currentPrice * 10; 
-        console.log('responseAccountBalance',responseAccountBalance);
-        console.log('currentPrice',currentPrice);
-        console.log('minimumRequireBalance',minimumRequireBalance);
         if(responseAccountBalance > minimumRequireBalance){
-          console.log('success');
         //call user/startBotManual    
           this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
           .subscribe((res) => { 
             this.message = res["message"];
-            this.alertclass = "alert-success";
-            // Show res success message
+            this.toaster.success(this.message);
           },
           err => {
             this.message = err.error["message"];
-            this.alertclass = "alert-danger";
-            // Show res Error message
+            this.toaster.error(this.message);
+            
           });
           this.autoPPPETHVolumeGenratOrder.reset();
         }else{
@@ -255,13 +229,12 @@ export class AutoComponent implements OnInit, AfterViewInit {
           this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
           .subscribe((res) => { 
             this.message = res["message"];
-            this.alertclass = "alert-success";
-            // Show res success message
+            this.toaster.success(this.message);
           },
           err => {
             this.message = err.error["message"];
-            this.alertclass = "alert-danger";
-            // Show res Error message
+            this.toaster.error(this.message);
+
           });
           this.autoPPPETHVolumeGenratOrder.reset();
         }else{
@@ -307,13 +280,12 @@ export class AutoComponent implements OnInit, AfterViewInit {
           this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
           .subscribe((res) => { 
             this.message = res["message"];
-            this.alertclass = "alert-success";
-            // Show res success message
+            this.toaster.success(this.message);
           },
           err => {
             this.message = err.error["message"];
-            this.alertclass = "alert-danger";
-            // Show res Error message
+            this.toaster.error(this.message);
+
           });
           this.autoPPPETHVolumeGenratOrder.reset();
         }else{
@@ -358,13 +330,12 @@ export class AutoComponent implements OnInit, AfterViewInit {
           this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
           .subscribe((res) => { 
             this.message = res["message"];
-            this.alertclass = "alert-success";
-            // Show res success message
+            this.toaster.success(this.message);
           },
           err => {
             this.message = err.error["message"];
-            this.alertclass = "alert-danger";
-            // Show res Error message
+            this.toaster.error(this.message);
+
           });
           this.autoPPPETHVolumeGenratOrder.reset();
         }else{
@@ -453,67 +424,15 @@ export class AutoComponent implements OnInit, AfterViewInit {
     .subscribe(
       res => {
         this.stopmessage = res["message"];
-        this.alertstopclass = "alert-success";
-        // this.displaystopstyle = {
-        //   "display":"block"
-        // };
-        // window.setTimeout(()=>{
-        //   this.displaystopstyle = {
-        //     "display":"none"
-        //   };
-        // },10000);
+        this.toaster.success(this.stopmessage);
       },
       err=>{
         this.stopmessage = err["message"] ;
-        this.alertstopclass = "alert-danger";
-        // this.displaystopstyle = {
-        //   "display":"block"
-        // };
-        // window.setTimeout(()=>{
-        //   this.displaystopstyle = {
-        //     "display":"none"
-        //   };
-        // },10000);
+        this.toaster.error(this.stopmessage);
       }
     );
   }
- 
-  // getorder_id(){
-  //   this._router.getOrderStatus(this.OrderStatus.value)
-  //   .subscribe(
-  //   res=>{
-  //     if(res["data"].message){
-  //       this.orderstatusmsg = res["data"].message
-  //     }
-  //     else{
-  //       this.orderstatusmsg = "Order: " + res["data"].id + " is " + res["data"].status;
-  //     }
-  //       this.orderstatusclass = "alert-success";
-  //       this.orderstatus = {
-  //         "display":"block"
-  //       };
-  //       window.setTimeout(()=>{
-  //         this.orderstatus = {
-  //           "display":"none"
-  //         };
-  //       },10000);
-  //   },
-  //   err => {
-  //     console.log(err,"error");
-      
-  //     this.orderstatusmsg = err["data"] ;
-  //     this.orderstatusclass = "alert-danger";
-  //     this.orderstatus = {
-  //       "display":"block"
-  //     };
-  //     window.setTimeout(()=>{
-  //       this.orderstatus = {
-  //         "display":"none"
-  //       };
-  //     },10000);
-  //   })
-  //   this.OrderStatus.reset()
-  // }
+
   checkLocalstorage(){
     let getVolume = JSON.parse(localStorage.getItem("volume"));
     let getPrice = JSON.parse(localStorage.getItem("price"));
