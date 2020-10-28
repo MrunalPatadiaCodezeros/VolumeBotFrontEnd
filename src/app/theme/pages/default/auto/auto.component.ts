@@ -157,6 +157,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
     this.isETHVolumActive = true;
     this.botIsNotReady = false;
     this.setLocalstorage("volume");
+    console.log('-this.autoPPPETHVolumeGenratOrder.value>',this.autoPPPETHVolumeGenratOrder.value);
     // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
     this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
     // Check Account Balance is Grater then Last Traded Price
@@ -209,7 +210,8 @@ export class AutoComponent implements OnInit, AfterViewInit {
     this.isBTCVolumActive = true;
     // inputs:- pair,minimumVolumeQuantity,maximumVolumeQuantity,time  
     this.setLocalstorage("volume");
-    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    console.log('-this.autoPPPBTCVolumeGenratOrder.value>',this.autoPPPBTCVolumeGenratOrder.value);
+    this.autoPPPBTCVolumeGenratOrder.value.pair = ExPair.pair;
     // Check Account Balance is Grater then Last Traded Price
     var responseAccountBalance;
     var currentPrice;
@@ -250,7 +252,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
             this.toaster.error(this.message);
 
           });
-          this.autoPPPETHVolumeGenratOrder.reset();
+          this.autoPPPBTCVolumeGenratOrder.reset();
         }else{
           console.log('success');
           // Show Error Message Balance not require
@@ -267,7 +269,8 @@ export class AutoComponent implements OnInit, AfterViewInit {
     console.log('pair',ExPair)
     // inputs:- pair,price,time
     this.setLocalstorage("price");
-    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    console.log('-this.autoPPPETHPriceGenratOrder.value>',this.autoPPPETHPriceGenratOrder.value);
+    this.autoPPPETHPriceGenratOrder.value.pair = ExPair.pair;
     // Check Account Balance is Grater then Last Traded Price
     var responseAccountBalance;
     var currentPrice;
@@ -307,7 +310,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
             this.toaster.error(this.message);
 
           });
-          this.autoPPPETHVolumeGenratOrder.reset();
+          this.autoPPPETHPriceGenratOrder.reset();
         }else{
           console.log('success');
           // Show Error Message Balance not require
@@ -323,7 +326,8 @@ export class AutoComponent implements OnInit, AfterViewInit {
     console.log('pair',ExPair)
     // inputs:- pair,price,time  
     this.setLocalstorage("price");
-    this.autoPPPETHVolumeGenratOrder.value.pair = ExPair.pair;
+    console.log('-this.autoPPPBTCPriceGenratOrder.value>',this.autoPPPBTCPriceGenratOrder.value);
+    this.autoPPPBTCPriceGenratOrder.value.pair = ExPair.pair;
     // Check Account Balance is Grater then Last Traded Price
     var responseAccountBalance;
     var currentPrice;
@@ -363,7 +367,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
             this.toaster.error(this.message);
 
           });
-          this.autoPPPETHVolumeGenratOrder.reset();
+          this.autoPPPBTCPriceGenratOrder.reset();
         }else{
           console.log('success');
           // Show Error Message Balance not require
