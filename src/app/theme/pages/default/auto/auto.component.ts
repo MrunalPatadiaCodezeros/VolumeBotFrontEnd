@@ -78,7 +78,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   autoPPPBTCVolumeGenratOrder = new FormGroup({
   PPPBTCminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
   PPPBTCmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
-  PPPBTCtime: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')])
+  PPPBTCtime: new FormControl("",[Validators.required,Validators.pattern('^((?:[1-9]|1[0-9]|2[0-3])?)$')])
   });
   get PPPBTCminimumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCminimumVolumeQuantity")};
   get PPPBTCmaximumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCmaximumVolumeQuantity")};
@@ -87,7 +87,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   // PPPETH Price Genrat Order
   autoPPPETHPriceGenratOrder = new FormGroup({
   PPPETHprice: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
-  PPPETHtimeforprice: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')]),
+  PPPETHtimeforprice: new FormControl("",[Validators.required,Validators.pattern('^((?:[1-9]|1[0-9]|2[0-3])?)$')]),
   });
   get PPPETHprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHprice")};
   get PPPETHtimeforprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHtimeforprice")};
@@ -95,7 +95,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   // PPPBTC Price Genrat Order
   autoPPPBTCPriceGenratOrder = new FormGroup({
   PPPBTCprice: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
-  PPPBTCtimeforprice: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')]),
+  PPPBTCtimeforprice: new FormControl("",[Validators.required,Validators.pattern('^((?:[1-9]|1[0-9]|2[0-3])?)$')]),
   });
   get PPPBTCprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCprice")};
   get PPPBTCtimeforprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCtimeforprice")};
@@ -109,7 +109,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
     let stats = this.checkLocalstorage();
     this.botIsNotReady = true;
     // if(stats.volume == null && stats.price == null){
-    //   this.botIsNotReady = false;
+    //   this.botIsNotReady = false;        
     // }
     console.log('---------checkLocalstorage---------',stats);
     // console.log('-Bot>',localStorage.getItem("Bot"));
@@ -407,7 +407,9 @@ export class AutoComponent implements OnInit, AfterViewInit {
     }
     else if(stopBotPair == "PPP/ETH" && obj.side === 'price'&& (this.isBTCPriceActive === undefined || this.isBTCPriceActive === false )){
       this.botIsNotReady = true;
+      console.log('this.checkedOrNot',this.checkedOrNot);
       this.checkedOrNot = true;
+      console.log('this.checkedOrNot',this.checkedOrNot);
       // this.setLocalstorage('price');
       localStorage.removeItem("volume");
       localStorage.removeItem("price");
