@@ -178,7 +178,14 @@ export class AutoComponent implements OnInit, AfterViewInit {
         minimumRequireBalance = currentPrice * 10; 
         if(responseAccountBalance > minimumRequireBalance){
         //call user/startBotManual    
-          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+        let formInputs = this.autoPPPETHVolumeGenratOrder.value;
+        let resPassed = {
+          pair:formInputs.pair,
+          minvolume:parseFloat(formInputs.PPPETHminimumVolumeQuantity),
+          maxvolume:parseFloat(formInputs.PPPETHmaximumVolumeQuantity),
+          runtime:parseInt(formInputs.PPPETHtime) 
+        }  
+        this._router.startbotManual(resPassed)
           .subscribe((res) => { 
             this.message = res["message"];
             this.toaster.success(this.message);
@@ -226,7 +233,14 @@ export class AutoComponent implements OnInit, AfterViewInit {
         if(responseAccountBalance > minimumRequireBalance){
           console.log('success');
         //call user/startBotManual    
-          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+        let formInputs = this.autoPPPBTCVolumeGenratOrder.value;
+        let resPassed = {
+          pair:formInputs.pair,
+          minvolume:parseFloat(formInputs.PPPBTCminimumVolumeQuantity),
+          maxvolume:parseFloat(formInputs.PPPBTCmaximumVolumeQuantity),
+          runtime:parseInt(formInputs.PPPBTCtime) 
+        }  
+          this._router.startbotManual(resPassed)
           .subscribe((res) => { 
             this.message = res["message"];
             this.toaster.success(this.message);
@@ -277,7 +291,13 @@ export class AutoComponent implements OnInit, AfterViewInit {
         if(responseAccountBalance > minimumRequireBalance){
           console.log('success');
         //call user/startBotManual    
-          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+        let formInputs = this.autoPPPETHPriceGenratOrder.value;
+        let resPassed = {
+          pair:formInputs.pair,
+          runtime:parseInt(formInputs.PPPETHtimeforprice),
+          price:parseFloat(formInputs.PPPETHprice)
+        }    
+          this._router.startbotManual(resPassed)
           .subscribe((res) => { 
             this.message = res["message"];
             this.toaster.success(this.message);
@@ -327,7 +347,13 @@ export class AutoComponent implements OnInit, AfterViewInit {
         if(responseAccountBalance > minimumRequireBalance){
           console.log('success');
         //call user/startBotManual    
-          this._router.startbotManual(this.autoPPPETHVolumeGenratOrder.value)
+          let formInputs = this.autoPPPBTCPriceGenratOrder.value;
+          let resPassed = {
+            pair:formInputs.pair,
+            runtime:parseInt(formInputs.PPPETHtimeforprice),
+            price:parseFloat(formInputs.PPPETHprice)
+          }
+          this._router.startbotManual(resPassed)
           .subscribe((res) => { 
             this.message = res["message"];
             this.toaster.success(this.message);
