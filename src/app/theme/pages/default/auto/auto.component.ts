@@ -78,7 +78,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   autoPPPBTCVolumeGenratOrder = new FormGroup({
   PPPBTCminimumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
   PPPBTCmaximumVolumeQuantity: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
-  PPPBTCtime: new FormControl("",[Validators.required,Validators.maxLength(2),Validators.pattern('[0-9]*')])
+  PPPBTCtime: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')])
   });
   get PPPBTCminimumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCminimumVolumeQuantity")};
   get PPPBTCmaximumVolumeQuantity(){return this.autoPPPBTCVolumeGenratOrder.get("PPPBTCmaximumVolumeQuantity")};
@@ -87,7 +87,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   // PPPETH Price Genrat Order
   autoPPPETHPriceGenratOrder = new FormGroup({
   PPPETHprice: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
-  PPPETHtimeforprice: new FormControl("",[Validators.required,Validators.maxLength(2),Validators.pattern('[0-9]*')]),
+  PPPETHtimeforprice: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')]),
   });
   get PPPETHprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHprice")};
   get PPPETHtimeforprice(){return this.autoPPPETHPriceGenratOrder.get("PPPETHtimeforprice")};
@@ -95,7 +95,7 @@ export class AutoComponent implements OnInit, AfterViewInit {
   // PPPBTC Price Genrat Order
   autoPPPBTCPriceGenratOrder = new FormGroup({
   PPPBTCprice: new FormControl("",[Validators.required,Validators.maxLength(8),Validators.pattern('[.0-9]*')]),
-  PPPBTCtimeforprice: new FormControl("",[Validators.required,Validators.maxLength(2),Validators.pattern('[0-9]*')]),
+  PPPBTCtimeforprice: new FormControl("",[Validators.required,Validators.pattern('([01]\d|2[0-4])*')]),
   });
   get PPPBTCprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCprice")};
   get PPPBTCtimeforprice(){return this.autoPPPBTCPriceGenratOrder.get("PPPBTCtimeforprice")};
